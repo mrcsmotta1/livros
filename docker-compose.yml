@@ -1,0 +1,43 @@
+
+services:
+  postgressLivros:
+      container_name: postgressLivros
+      image: postgres:15
+      restart: unless-stopped
+      shm_size: 1G
+      environment:
+        POSTGRES_DB: postgres
+        POSTGRES_USER: root
+        POSTGRES_PASSWORD: root
+      volumes:
+        - pgdata:/var/lib/postgresql/data
+      ports:
+        - 5432:5432
+      networks:
+        - app
+
+  app:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      container_name: app
+      working_dir: /app
+      extra_hosts:
+        - "host.docker.internal:host-gateway"
+      volumes:
+        - ./:/app
+      ports:
+        - "9000:8000"
+      command: bash -c "composer install && php artisan serve --host=0.0.0.0 --port=8000"
+      depends_on:
+        - postgressLivros
+      networks:
+        - app
+
+networks:
+  app:
+    driver: bridge
+
+volumes:
+  pgdata:
+    driver: local
