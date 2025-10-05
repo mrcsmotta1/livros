@@ -1,6 +1,6 @@
 <x-guest-layout>
     <div class="mb-4 text-sm text-gray-600">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+        {{ __('Esqueceu sua senha? Sem problemas. Basta nos informar seu endereço de e-mail e enviaremos um link de redefinição de senha que permitirá que você escolha um novo.') }}
     </div>
 
     <!-- Session Status -->
@@ -16,9 +16,13 @@
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
-        <div class="flex items-center justify-end mt-4">
+        <div class="w-full flex justify-between items-center mt-4">
+            <a href="{{ url()->previous() }}"
+                class="inline-flex items-center px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400">
+                ← Voltar
+            </a>
             <x-primary-button>
-                {{ __('Email Password Reset Link') }}
+                {{ __('Enviar link de redefinição de senha') }}
             </x-primary-button>
         </div>
     </form>
