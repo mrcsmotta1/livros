@@ -9,6 +9,8 @@
     <!-- Bootstrap CSS -->
     {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/custom-alerts.css') }}">
+
 </head>
 <body class="bg-light text-dark d-flex flex-column min-vh-100">
 
@@ -26,10 +28,12 @@
 
     <!-- Page Content -->
     <main class="container py-4 flex-grow-1">
-        {{ $slot }}
+       {{ $slot }}
     </main>
 
     <!-- Bootstrap JS via Mix -->
     <script src="{{ mix('js/app.js') }}"></script>
+    <script src="{{ asset('js/custom-alerts.js') }}"></script>
+
 </body>
 </html>

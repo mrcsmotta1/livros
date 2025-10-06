@@ -26,7 +26,7 @@
                     <a class="nav-link" href="#">Autor</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Assunto</a>
+                    <a class="nav-link {{ request()->routeIs('assuntos.index') ? 'active' : '' }}" href="{{ route('assuntos.index') }}">Assunto</a>
                 </li>
             </ul>
 
