@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
     <div class="container mt-4">
-        <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="mb-3 d-flex justify-content-between align-items-center">
             <h1>Lista de Assuntos</h1>
             <!-- Botão para criar novo assunto -->
             <a href="{{ route('assuntos.create') }}" class="btn btn-primary">Criar Assunto</a>
@@ -28,12 +28,12 @@
         @endif
 
         <!-- Tabela de assuntos -->
-        <table class="table table-bordered">
+        <table class="table align-middle table-bordered">
             <thead>
                 <tr>
-                    <th>ID</th>
+                    <th style="width: 10%">ID</th>
                     <th>Descrição</th>
-                    <th>Ações</th>
+                    <th style="width: 15%" class="text-center">Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -41,13 +41,16 @@
                 <tr>
                     <td>{{ $assunto->codAs }}</td>
                     <td>{{ $assunto->descricao }}</td>
-                    <td>
+                    <td class="text-center">
                         <a href="{{ route('assuntos.edit', $assunto->codAs) }}"
-                            class="btn btn-sm btn-warning">Editar</a>
+                            class="btn btn-sm btn-warning">
+                            <i class="bi bi-pencil"></i>ditar</a>
                         <form action="{{ route('assuntos.destroy', $assunto->codAs) }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-danger btn-delete">Excluir</button>
+                            <button type="submit" class="btn btn-sm btn-danger btn-delete">
+                                <i class="bi bi-trash"></i> Excluir
+                            </button>
                         </form>
                     </td>
                 </tr>
