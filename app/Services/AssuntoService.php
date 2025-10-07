@@ -2,83 +2,39 @@
 
 namespace App\Services;
 
+use App\Interfaces\Repositories\AssuntoRepositoryInterface;
+use App\Interfaces\Services\AssuntoServiceInterface;
 use App\Models\Assunto;
-use Exception; // Para lançar exceções em caso de erro
+use Illuminate\Database\Eloquent\Collection;
 
-class AssuntoService
+class AssuntoService implements AssuntoServiceInterface
 {
-
-    /**
-     * Retorna todos os assuntos ordenados por codAs.
-     *
-     * @return \Illuminate\Database\Eloquent\Collection
-     * @throws Exception
-     */
-    public function getAllAssuntos(): mixed
+    public function __construct(protected AssuntoRepositoryInterface $repository)
     {
-        try {
-            return Assunto::orderBy('codAs')->get();
-        } catch (Exception $e) {
-            throw new Exception("Erro ao listar assuntos: " . $e->getMessage());
-        }
     }
 
-    /**
-     * Cria um novo assunto.
-     *
-     * @param array $data Dados do assunto a ser criado
-     * @return Assunto
-     * @throws Exception
-     */
-    public function createAssunto(array $data): Assunto
+    public function listarAssuntos(): Collection
     {
-        try {
-            return Assunto::create($data);
-        } catch (Exception $e) {
-            throw new Exception("Erro ao criar assunto: " . $e->getMessage());
-        }
+        return $this->repository->getAllAssuntos();
     }
 
-    /**
-     * Atualiza um assunto existente.
-     *
-     * @param Assunto $assunto O assunto a ser atualizado
-     * @param array $data Dados atualizados do assunto
-     * @return bool
-     * @throws Exception
-     */
-    public function updateAssunto(Assunto $assunto, array $data): bool
+    public function buscarPorId(int $codAs): Assunto
     {
-        try {
-            return $assunto->update($data);
-        } catch (Exception $e) {
-            throw new Exception("Erro ao atualizar assunto: " . $e->getMessage());
-        }
+        return $this->repository->findAssuntoById($codAs);
     }
 
-    /**
-     * Encontra um assunto pelo ID.
-     *
-     * @param int $id
-     * @return Assunto|null
-     */
-    public function findAssuntoById(int $id): ?Assunto
+    public function criarAssunto(array $dados): Assunto
     {
-        return Assunto::query()->where('codAs', $id)->first();
+        return $this->repository->createAssunto($dados);
     }
 
-    /**
-     * Deleta um assunto.
-     *
-     * @param Assunto $assunto
-     * @return bool|null
-     */
-    public function deleteAssunto(Assunto $assunto): ?bool
+    public function atualizarAssunto(int $codAs, array $dados): Assunto
     {
-        try {
-            return $assunto->delete();
-        } catch (Exception $e) {
-            throw new Exception("Erro ao deletar assunto: " . $e->getMessage());
-        }
+        return $this->repository->updateAssunto($codAs, $dados);
+    }
+
+    public function deletarAssunto(int $codAs): bool
+    {
+        return $this->repository->deleteAssunto($codAs);
     }
 }

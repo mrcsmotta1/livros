@@ -3,29 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AssuntoStoreRequest;
-use App\Models\Assunto;
-use Illuminate\Http\Request;
-use App\Services\AssuntoService;
-use Illuminate\Validation\ValidationException;
+use App\Interfaces\Services\AssuntoServiceInterface;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 use Exception;
-use Illuminate\Database\QueryException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class AssuntoController extends Controller
 {
-    public function __construct(private AssuntoService $assuntoService) {}
+    public function __construct(private AssuntoServiceInterface $service) {}
 
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        try {
-            $assuntos = $this->assuntoService->getAllAssuntos();
-            return view('assuntos.index', compact('assuntos'));
-        } catch (Exception $e) {
-            return redirect()->route('assuntos.index')
-                ->with('error', 'Erro ao carregar assuntos: ' . $e->getMessage());
-        }
+        $assuntos = $this->service->listarAssuntos();
+        return view('assuntos.index', compact('assuntos'));
     }
 
     /**
@@ -42,93 +36,64 @@ class AssuntoController extends Controller
     public function store(AssuntoStoreRequest $request)
     {
         try {
-            $validatedData = $request->validated();
-
-            $this->assuntoService->createAssunto($validatedData);
-
-            return redirect()->route('assuntos.index')
+            $this->service->criarAssunto($request->validated());
+            return redirect()
+                ->route('assuntos.index')
                 ->with('success', 'Assunto criado com sucesso!');
-        } catch (ValidationException $e) {
-            return redirect()->back()
-                ->with('error', 'Erro ao criar assunto: ' . $e->getMessage())
-                ->withInput();
-        } catch (QueryException $e) {
-            return redirect()->back()
-                ->with('error', 'Erro ao criar assunto, tente novamente.')
-                ->withInput();
         } catch (Exception $e) {
-            return redirect()->back()
-                ->with('error', 'Ocorreu um erro inesperado.')
-                ->withInput();
+            return redirect()
+                ->route('assuntos.index')
+                ->with('error', 'Erro ao criar assunto: tente novamente.');
         }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(int $codAs): RedirectResponse|View
     {
         try {
-            $assunto = $this->assuntoService->findAssuntoById($id);
-
-            if (!$assunto) {
-                return redirect()->route('assuntos.index')
-                    ->with('error', 'Assunto não encontrado');
-            }
-
+            $assunto = $this->service->buscarPorId($codAs);
             return view('assuntos.show', compact('assunto'));
-        } catch (Exception $e) {
-            return redirect()->route('assuntos.index')
-                ->with('error', 'Erro ao buscar assunto: ' . $e->getMessage());
+        } catch (ModelNotFoundException $e) {
+            return redirect()
+                ->route('assuntos.index')
+                ->with('error', 'Assunto não encontrado.');
         }
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(int $codAs): RedirectResponse|View
     {
         try {
-            $assunto = $this->assuntoService->findAssuntoById($id);
-
-            if (!$assunto) {
-                return redirect()->route('assuntos.index')
-                    ->with('error', 'Assunto não encontrado');
-            }
-
+            $assunto = $this->service->buscarPorId($codAs);
             return view('assuntos.edit', compact('assunto'));
-        } catch (Exception $e) {
-            return redirect()->route('assuntos.index')
-                ->with('error', 'Erro ao buscar assunto para edição: ' . $e->getMessage());
+        } catch (ModelNotFoundException $e) {
+            return redirect()
+                ->route('assuntos.index')
+                ->with('error', 'Assunto não encontrado.');
         }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(AssuntoStoreRequest $request, int $codAs)
     {
         try {
-            $assunto = $this->assuntoService->findAssuntoById($id);
-
-            if (!$assunto) {
-                return redirect()->route('assuntos.index')
-                    ->with('error', 'Assunto não encontrado');
-            }
-
-            $validatedData = $request->validate([
-                'descricao' => 'required|string|max:20|unique:assuntos,descricao,' . $id . ',codAs', // Ignora o próprio assunto ao verificar unicidade
-            ]);
-
-            $this->assuntoService->updateAssunto($assunto, $validatedData);
-
-            return redirect()->route('assuntos.index')
+            $this->service->atualizarAssunto($codAs, $request->validated());
+            return redirect()
+                ->route('assuntos.index')
                 ->with('success', 'Assunto atualizado com sucesso!');
-        } catch (ValidationException $e) {
-            return redirect()->route('assuntos.index')
-                ->with('error', 'Erro ao atualizar assunto: ' . $e->getMessage());
+        } catch (ModelNotFoundException $e) {
+            return redirect()
+                ->route('assuntos.index')
+                ->with('error', 'Assunto não encontrado.');
         } catch (Exception $e) {
-            return redirect()->route('assuntos.index')
+            return redirect()
+                ->route('assuntos.index')
                 ->with('error', 'Erro ao atualizar assunto: ' . $e->getMessage());
         }
     }
@@ -136,22 +101,20 @@ class AssuntoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(int $codAs)
     {
         try {
-            $assunto = $this->assuntoService->findAssuntoById($id);
-
-            if (!$assunto) {
-                return redirect()->route('assuntos.index')
-                    ->with('error', 'Assunto não encontrado');
-            }
-
-            $this->assuntoService->deleteAssunto($assunto);
-
-            return redirect()->route('assuntos.index')
+            $this->service->deletarAssunto($codAs);
+            return redirect()
+                ->route('assuntos.index')
                 ->with('success', 'Assunto excluído com sucesso!');
+        } catch (ModelNotFoundException $e) {
+            return redirect()
+                ->route('assuntos.index')
+                ->with('error', 'Assunto não encontrado.');
         } catch (Exception $e) {
-            return redirect()->route('assuntos.index')
+            return redirect()
+                ->route('assuntos.index')
                 ->with('error', 'Erro ao excluir assunto: ' . $e->getMessage());
         }
     }
