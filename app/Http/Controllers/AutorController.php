@@ -3,18 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AutorStoreRequest;
-use Illuminate\Http\Request;
 use App\Models\Autor;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Interfaces\Services\AutorServiceInterface;
+use Exception;
 
 class AutorController extends Controller
 {
+    public function __construct(protected AutorServiceInterface $service) {}
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $autores = Autor::all();
+        $autores = $this->service->listarAutores();
         return view('autores.index', compact('autores'));
     }
 
@@ -31,10 +33,14 @@ class AutorController extends Controller
      */
     public function store(AutorStoreRequest $request)
     {
-        Autor::create($request->validated());
-
-        return redirect()->route('autores.index')
-            ->with('success', 'Autor criado com sucesso!');
+        try {
+            $this->service->criarAutor($request->validated());
+            return redirect()->route('autores.index')
+                ->with('success', 'Autor criado com sucesso!');
+        } catch (Exception $e) {
+            return redirect()->route('autores.index')
+                ->with('error', 'Erro ao criar autor: tente novamente.');
+        }
     }
 
     /**
@@ -43,7 +49,7 @@ class AutorController extends Controller
     public function show(int $codAu)
     {
         try {
-            $autor = Autor::findOrFail($codAu);
+            $autor = $this->service->buscarPorId($codAu);
             return view('autores.show', compact('autor'));
         } catch (ModelNotFoundException $e) {
             return redirect()
@@ -58,7 +64,7 @@ class AutorController extends Controller
     public function edit(int $codAu)
     {
         try {
-            $autor = Autor::findOrFail($codAu);
+            $autor = $this->service->buscarPorId($codAu);
             return view('autores.edit', compact('autor'));
         } catch (ModelNotFoundException $e) {
             return redirect()
@@ -73,14 +79,17 @@ class AutorController extends Controller
     public function update(AutorStoreRequest $request, int $codAu)
     {
         try {
-            $autor = Autor::findOrFail($codAu);
-            $autor->update($request->validated());
+            $this->service->atualizarAutor($codAu, $request->validated());
             return redirect()->route('autores.index')
                 ->with('success', 'Autor atualizado com sucesso!');
         } catch (ModelNotFoundException $e) {
             return redirect()
                 ->route('autores.index')
                 ->with('error', 'Autor não encontrado.');
+        } catch (Exception $e) {
+            return redirect()
+                ->route('autores.index')
+                ->with('error', 'Erro ao atualizar autor: ' . $e->getMessage());
         }
     }
 
@@ -90,14 +99,18 @@ class AutorController extends Controller
     public function destroy(int $codAu)
     {
         try {
-            $autor = Autor::findOrFail($codAu);
-            $autor->delete();
-            return redirect()->route('autores.index')
+            $this->service->deletarAutor($codAu);
+            return redirect()
+                ->route('autores.index')
                 ->with('success', 'Autor excluído com sucesso!');
         } catch (ModelNotFoundException $e) {
             return redirect()
                 ->route('autores.index')
                 ->with('error', 'Autor não encontrado.');
+        } catch (Exception $e) {
+            return redirect()
+                ->route('autores.index')
+                ->with('error', 'Erro ao excluir autor: ' . $e->getMessage());
         }
     }
 }
