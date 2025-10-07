@@ -33,7 +33,7 @@
                 <tr>
                     <th style="width: 10%">ID</th>
                     <th>Descrição</th>
-                    <th style="width: 15%" class="text-center">Ações</th>
+                    <th style="width: 20%" class="text-center">Ações</th>
                 </tr>
             </thead>
             <tbody>
@@ -42,6 +42,9 @@
                     <td>{{ $assunto->codAs }}</td>
                     <td>{{ $assunto->descricao }}</td>
                     <td class="text-center">
+                        <a href="{{ route('assuntos.show', $assunto->codAs) }}"
+                            class="btn btn-sm btn-info">
+                            <i class="bi bi-eye"></i> Ver</a>
                         <a href="{{ route('assuntos.edit', $assunto->codAs) }}"
                             class="btn btn-sm btn-warning">
                             <i class="bi bi-pencil"></i>ditar</a>
