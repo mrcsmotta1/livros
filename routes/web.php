@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AssuntoController;
+use App\Http\Controllers\AutorController;
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -23,6 +24,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('assuntos', AssuntoController::class);
+    Route::resource('autores', AutorController::class);
 });
 
 require __DIR__.'/auth.php';

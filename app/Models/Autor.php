@@ -17,4 +17,9 @@ class Autor extends Model
         'nome'
     ];
     public $timestamps = true;
+
+    public function setNomeAttribute($value)
+    {
+        $this->attributes['nome'] = ucwords(strtolower(trim($value)));
+    }
 }
