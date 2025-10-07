@@ -9,6 +9,7 @@ class Assunto extends Model
 {
     use HasFactory;
 
+    protected $table = 'assunto';
     protected $primaryKey = 'codAs';
     public $incrementing = true;
     protected $keyType = 'int';
