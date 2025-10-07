@@ -3,6 +3,11 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Interfaces\Repositories\AssuntoRepositoryInterface;
+use App\Repositories\EloquentAssuntoRepository;
+use App\Interfaces\Services\AssuntoServiceInterface;
+use App\Services\AssuntoService;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        $this->app->bind(AssuntoRepositoryInterface::class, EloquentAssuntoRepository::class);
+        $this->app->bind(AssuntoServiceInterface::class, AssuntoService::class);
     }
 }
