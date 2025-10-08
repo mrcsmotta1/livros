@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AssuntoController;
 use App\Http\Controllers\AutorController;
+use App\Http\Controllers\LivrosController;
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -25,6 +26,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('assuntos', AssuntoController::class);
     Route::resource('autores', AutorController::class);
+    Route::resource('livros', LivrosController::class);
 });
 
 require __DIR__.'/auth.php';

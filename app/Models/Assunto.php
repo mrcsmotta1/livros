@@ -17,4 +17,9 @@ class Assunto extends Model
         'descricao'
     ];
     public $timestamps = true;
+
+    public function livros()
+    {
+        return $this->belongsToMany(Livro::class, 'livro_assunto', 'assunto_codAs', 'livro_codl');
+    }
 }

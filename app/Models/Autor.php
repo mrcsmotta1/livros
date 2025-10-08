@@ -22,4 +22,10 @@ class Autor extends Model
     {
         $this->attributes['nome'] = ucwords(strtolower(trim($value)));
     }
+
+    public function livros()
+    {
+        return $this->belongsToMany(Livro::class, 'livro_autor', 'autor_codAu', 'livro_codl');
+    }
+
 }

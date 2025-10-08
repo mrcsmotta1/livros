@@ -20,7 +20,7 @@
                     <a class="nav-link {{ request()->routeIs('index') ? 'active' : '' }}" href="{{ route('index') }}">Index</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Livro</a>
+                    <a class="nav-link {{ request()->routeIs('livros.index') ? 'active' : '' }}" href="{{ route('livros.index') }}">Livros</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('autores.index') ? 'active' : '' }}" href="{{ route('autores.index') }}">Autor</a>

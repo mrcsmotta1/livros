@@ -25,6 +25,9 @@
     "dependencies": {
         "bootstrap": "^5.3.8",
         "bootstrap-icons": "^1.13.1",
+        "inputmask": "^5.0.9",
+        "jquery": "^3.7.1",
+        "select2": "^4.1.0-rc.0",
         "sweetalert2": "^11.23.0"
     }
 }
