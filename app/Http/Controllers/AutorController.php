@@ -7,6 +7,7 @@ use App\Models\Autor;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Interfaces\Services\AutorServiceInterface;
 use Exception;
+use Illuminate\Http\Request;
 
 class AutorController extends Controller
 {
@@ -112,5 +113,40 @@ class AutorController extends Controller
                 ->route('autores.index')
                 ->with('error', 'Erro ao excluir autor: ' . $e->getMessage());
         }
+    }
+
+    public function search(Request $request)
+    {
+          //Retorna itens do form Edit
+        if ($request->filled('id')) {
+            $ids = (array) $request->get('id');
+            $result = Autor::whereIn('codAu', $ids)
+                ->selectRaw('"codAu" as id, nome as text')
+                ->orderBy('nome')
+                ->get();
+
+            return response()->json($result);
+        }
+
+        $query = Autor::query();
+
+        if ($request->filled('exclude')) {
+            $exclude = array_filter(array_map('intval', (array) $request->exclude));
+            if (!empty($exclude)) {
+                $query->whereNotIn("codAu", $exclude);
+            }
+        }
+
+        $term = $request->get('q', '');
+        if ($term) {
+            $query->whereRaw('"nome" ILIKE ?', ["%{$term}%"]);
+        }
+
+        $result = $query->selectRaw('"codAu" as id, "nome"')
+            ->orderBy('nome')
+            ->get();
+
+
+        return response()->json($result);
     }
 }

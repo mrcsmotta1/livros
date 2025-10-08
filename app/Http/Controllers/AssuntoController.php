@@ -8,6 +8,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
+use App\Models\Assunto;
 
 class AssuntoController extends Controller
 {
@@ -117,5 +119,38 @@ class AssuntoController extends Controller
                 ->route('assuntos.index')
                 ->with('error', 'Erro ao excluir assunto: ' . $e->getMessage());
         }
+    }
+
+    public function search(Request $request)
+    {
+        //Retorna itens do form Edit
+        if ($request->filled('id')) {
+            $ids = (array) $request->get('id');
+            $result = Assunto::whereIn('codAs', $ids)
+                ->selectRaw('"codAs" as id, "descricao" as text')
+                ->get();
+
+            return response()->json($result);
+        }
+
+        $query = Assunto::query();
+
+        if ($request->filled('exclude')) {
+            $exclude =  array_filter(array_map('intval', (array) $request->exclude));
+            if (!empty($exclude)) {
+                $query->whereNotIn("codAs", $exclude);
+            }
+        }
+
+        $term = $request->get('q', '');
+        if ($term) {
+            $query->whereRaw('"descricao" ILIKE ?', ["%{$term}%"]);
+        }
+
+        $assuntos = $query->selectRaw('"codAs" as id, "descricao"')
+            ->orderBy('descricao')
+            ->get();
+
+        return response()->json($assuntos);
     }
 }
