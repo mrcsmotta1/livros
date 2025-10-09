@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Livro;
 use Exception;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\LivroStoreRequest;
 
 class LivrosController extends Controller
 {
@@ -29,7 +30,7 @@ class LivrosController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(LivroStoreRequest $request)
     {
         try {
             $livro = Livro::create([
@@ -51,6 +52,7 @@ class LivrosController extends Controller
 
             return redirect()->route('livros.index')->with('success', 'Livro criado com sucesso!');
         } catch (Exception $e) {
+            // TODO: Remover $e->getMessage e logar o erro em arquivo txt.log
             return redirect()->route('livros.index')->with('error', 'Erro ao criar livro: ' . $e->getMessage());
         }
     }
@@ -76,7 +78,7 @@ class LivrosController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(LivroStoreRequest $request, string $id)
     {
         DB::beginTransaction();
 
@@ -103,7 +105,7 @@ class LivrosController extends Controller
             DB::commit();
 
             return redirect()
-                ->route('livros.show', $livro->codL)
+                ->route('livros.show', $livro->codl)
                 ->with('success', 'Livro atualizado com sucesso!');
         } catch (Exception $e) {
             DB::rollBack();

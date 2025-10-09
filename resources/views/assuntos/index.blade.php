@@ -66,33 +66,3 @@
         </table>
     </div>
 </x-app-layout>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-    const deleteButtons = document.querySelectorAll('.btn-delete');
-
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', function (e) {
-            e.preventDefault();
-
-            const form = this.closest('form');
-
-            Swal.fire({
-                title: 'Tem certeza?',
-                text: "Essa ação não poderá ser desfeita!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Sim, excluir!',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    form.submit();
-                }
-            });
-        });
-    });
-});
-
-</script>

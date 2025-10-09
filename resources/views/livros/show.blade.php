@@ -14,6 +14,8 @@
             </a>
         </div>
 
+        <x-validation-messages />
+
         <!-- Card principal -->
         <div class="shadow-sm card">
             <div class="card-body">
