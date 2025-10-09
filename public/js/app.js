@@ -36706,29 +36706,6 @@ document.addEventListener("DOMContentLoaded", function () {
     numericInput: true,
     removeMaskOnSubmit: true
   }).mask("#valor");
-  var form = document.getElementById("form-livro");
-  var anoInput = document.getElementById("ano_publicacao");
-  var valorInput = document.getElementById("valor");
-  if (form) {
-    form.addEventListener("submit", function (e) {
-      var anoAtual = new Date().getFullYear();
-      var valorAno = parseInt((anoInput === null || anoInput === void 0 ? void 0 : anoInput.value) || "", 10);
-      if (!isNaN(valorAno) && valorAno > anoAtual) {
-        e.preventDefault();
-        sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire({
-          icon: "warning",
-          title: "Ano inválido",
-          text: "O ano de publica\xE7\xE3o n\xE3o pode ser maior que ".concat(anoAtual, "."),
-          confirmButtonText: "Corrigir",
-          confirmButtonColor: "#3085d6"
-        }).then(function () {
-          anoInput.value = "";
-          anoInput.focus();
-        });
-        return;
-      }
-    });
-  }
   function getSelecionados(tipo, $current) {
     var ids = [];
     jquery__WEBPACK_IMPORTED_MODULE_4___default()(".".concat(tipo, "-select")).each(function () {
@@ -36911,6 +36888,29 @@ document.addEventListener("DOMContentLoaded", function () {
     inicializarSelectAssunto(div.find("select"));
     atualizarBotoesRemover("assunto");
     atualizarBotao("assunto");
+  });
+
+  // === Confirmação de delete ===
+  var deleteButtons = document.querySelectorAll(".btn-delete");
+  deleteButtons.forEach(function (button) {
+    button.addEventListener("click", function (e) {
+      e.preventDefault();
+      var form = button.closest("form");
+      sweetalert2__WEBPACK_IMPORTED_MODULE_1___default().fire({
+        title: "Tem certeza?",
+        text: "Essa ação não poderá ser desfeita!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Sim, excluir!",
+        cancelButtonText: "Cancelar"
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          form.submit();
+        }
+      });
+    });
   });
 });
 

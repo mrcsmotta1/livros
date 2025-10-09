@@ -29,32 +29,6 @@ document.addEventListener("DOMContentLoaded", function () {
         removeMaskOnSubmit: true,
     }).mask("#valor");
 
-    const form = document.getElementById("form-livro");
-    const anoInput = document.getElementById("ano_publicacao");
-    const valorInput = document.getElementById("valor");
-
-    if (form) {
-        form.addEventListener("submit", function (e) {
-            const anoAtual = new Date().getFullYear();
-            const valorAno = parseInt(anoInput?.value || "", 10);
-
-            if (!isNaN(valorAno) && valorAno > anoAtual) {
-                e.preventDefault();
-                Swal.fire({
-                    icon: "warning",
-                    title: "Ano inválido",
-                    text: `O ano de publicação não pode ser maior que ${anoAtual}.`,
-                    confirmButtonText: "Corrigir",
-                    confirmButtonColor: "#3085d6",
-                }).then(() => {
-                    anoInput.value = "";
-                    anoInput.focus();
-                });
-                return;
-            }
-        });
-    }
-
     function getSelecionados(tipo, $current) {
         const ids = [];
         $(`.${tipo}-select`).each(function () {
@@ -255,5 +229,29 @@ document.addEventListener("DOMContentLoaded", function () {
         inicializarSelectAssunto(div.find("select"));
         atualizarBotoesRemover("assunto");
         atualizarBotao("assunto");
+    });
+
+    // === Confirmação de delete ===
+    const deleteButtons = document.querySelectorAll(".btn-delete");
+    deleteButtons.forEach((button) => {
+        button.addEventListener("click", function (e) {
+            e.preventDefault();
+
+            const form = button.closest("form");
+            Swal.fire({
+                title: "Tem certeza?",
+                text: "Essa ação não poderá ser desfeita!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Sim, excluir!",
+                cancelButtonText: "Cancelar",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
     });
 });
