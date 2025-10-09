@@ -26,8 +26,8 @@ class LivroStoreRequest extends FormRequest
         $anoAtual = Carbon::now()->year;
 
         return [
-            'titulo'          => ['required', 'string', 'max:100'],
-            'editora'         => ['required', 'string', 'max:100'],
+            'titulo'          => ['required', 'string', 'min:2', 'max:100'],
+            'editora'         => ['required', 'string', 'min:2', 'max:100'],
             'edicao'          => ['required', 'integer', 'min:1'],
             'ano_publicacao'  => ['required', 'integer', 'min:1500', "max:{$anoAtual}"],
             'valor'           => ['required', 'numeric', 'gt:0'],
