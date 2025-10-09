@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use App\Models\Autor;
+use App\Models\Assunto;
 
 class Livro extends Model
 {
@@ -34,15 +36,14 @@ class Livro extends Model
         return $this->belongsToMany(Assunto::class, 'livro_assunto', 'livro_codl', 'assunto_codAs');
     }
 
-    // public function setValorAttribute($value)
-    // {
-    //     if (is_string($value)) {
-    //         $clean = str_replace(['R$', ' '], '', $value);
-    //         $clean = str_replace('.', '', $clean);
-    //         $clean = str_replace(',', '.', $clean);
-    //         $this->attributes['valor'] = is_numeric($clean) ? $clean : null;
-    //     } else {
-    //         $this->attributes['valor'] = $value;
-    //     }
-    // }
+    public function getAutorPrincipalAttribute(): object|null
+    {
+        return $this->autores()->orderBy('livro_autor.ordem')->first();
+    }
+
+    public function getAssuntoPrincipalAttribute(): object|null
+    {
+        return $this->assuntos()->orderBy('livro_assunto.ordem')->first();
+    }
+
 }
