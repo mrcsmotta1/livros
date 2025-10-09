@@ -34,15 +34,15 @@ class Livro extends Model
         return $this->belongsToMany(Assunto::class, 'livro_assunto', 'livro_codl', 'assunto_codAs');
     }
 
-    public function setValorAttribute($value)
-    {
-        if (is_string($value)) {
-            $clean = str_replace(['R$', ' '], '', $value);
-            $clean = str_replace('.', '', $clean);
-            $clean = str_replace(',', '.', $clean);
-            $this->attributes['valor'] = is_numeric($clean) ? $clean : null;
-        } else {
-            $this->attributes['valor'] = $value;
-        }
-    }
+    // public function setValorAttribute($value)
+    // {
+    //     if (is_string($value)) {
+    //         $clean = str_replace(['R$', ' '], '', $value);
+    //         $clean = str_replace('.', '', $clean);
+    //         $clean = str_replace(',', '.', $clean);
+    //         $this->attributes['valor'] = is_numeric($clean) ? $clean : null;
+    //     } else {
+    //         $this->attributes['valor'] = $value;
+    //     }
+    // }
 }
