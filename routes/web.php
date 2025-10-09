@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AssuntoController;
 use App\Http\Controllers\AutorController;
 use App\Http\Controllers\LivrosController;
+use App\Http\Controllers\IndexController;
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -16,9 +17,7 @@ Route::get('/', function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('/index', function () {
-        return view('index');
-    })->name('index');
+    Route::get('/index', [IndexController::class, 'index'])->name('index');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
