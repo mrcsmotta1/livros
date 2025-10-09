@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="h4 fw-semibold text-dark">Painel de Controle</h2>
+        <h2 class="h4 fw-semibold text-dark">Dashboard</h2>
     </x-slot>
 
     <div class="container mt-4">
@@ -87,10 +87,10 @@
                                 <td>{{ $livro->titulo }}</td>
                                 <td>{{ $livro->editora }}</td>
                                 <td>
-                                    {{ $livro->assuntos->sortBy('codAs')->pluck('descricao')->first() ?? '—' }}
+                                    {{ $livro->assunto_principal?->descricao ?? '—' }}
                                 </td>
                                 <td>
-                                    {{ $livro->autores->sortBy('codAu')->pluck('nome')->first() ?? '—' }}
+                                    {{ $livro->autor_principal?->nome ?? '—' }}
                                 </td>
                                 <td>{{ $livro->ano_publicacao ?? '—' }}</td>
                                 <td>R$ {{ number_format($livro->valor, 2, ',', '.') }}</td>

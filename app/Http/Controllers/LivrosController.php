@@ -41,13 +41,16 @@ class LivrosController extends Controller
                 'valor' => $request->valor,
             ]);
 
-            // Relacionamentos N:N
-            if ($request->has('autores')) {
-                $livro->autores()->sync($request->autores);
+            if ($request->autores) {
+                foreach ($request->autores as $index => $autorId) {
+                    $livro->autores()->attach($autorId, ['ordem' => $index + 1]);
+                }
             }
 
-            if ($request->has('assuntos')) {
-                $livro->assuntos()->sync($request->assuntos);
+            if ($request->assuntos) {
+                foreach ($request->assuntos as $index => $assuntoId) {
+                    $livro->assuntos()->attach($assuntoId, ['ordem' => $index + 1]);
+                }
             }
 
             return redirect()->route('livros.index')->with('success', 'Livro criado com sucesso!');
@@ -62,7 +65,11 @@ class LivrosController extends Controller
      */
     public function show(string $id)
     {
-        $livro = Livro::with(['autores', 'assuntos'])->findOrFail($id);
+        $livro = Livro::with([
+            'autores' => fn($q) => $q->orderBy('livro_autor.ordem'),
+            'assuntos' => fn($q) => $q->orderBy('livro_assunto.ordem'),
+        ])->findOrFail($id);
+
         return view('livros.show', compact('livro'));
     }
 
@@ -71,7 +78,11 @@ class LivrosController extends Controller
      */
     public function edit(string $id)
     {
-        $livro = Livro::with(['autores', 'assuntos'])->findOrFail($id);
+        $livro = Livro::with([
+            'autores' => fn($q) => $q->orderBy('livro_autor.ordem'),
+            'assuntos' => fn($q) => $q->orderBy('livro_assunto.ordem'),
+        ])->findOrFail($id);
+
         return view('livros.edit', compact('livro'));
     }
 
