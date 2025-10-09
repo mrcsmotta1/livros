@@ -12,6 +12,8 @@
             </a>
         </div>
 
+        <x-validation-messages />
+
         <form action="{{ route('autores.store') }}" method="POST">
             @csrf
 
@@ -20,20 +22,6 @@
                 <input type="text" name="nome" id="nome"
                     class="form-control @error('nome') is-invalid @enderror" value="{{ old('nome') }}"
                     required>
-
-                {{-- Erro de validação específico --}}
-                @error('nome')
-                <x-alert type="danger">
-                    {{ $message }}
-                </x-alert>
-                @enderror
-
-                {{-- Mensagem de sucesso --}}
-                @if(session('success'))
-                <x-alert type="success">
-                    {{ session('success') }}
-                </x-alert>
-                @endif
             </div>
 
             <button type="submit" class="btn btn-primary">

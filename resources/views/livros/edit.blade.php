@@ -14,6 +14,8 @@
             </a>
         </div>
 
+        <x-validation-messages />
+
         <!-- Formulário -->
         <form id="form-livro" action="{{ route('livros.update', $livro->codl) }}" method="POST">
             @csrf
@@ -61,19 +63,20 @@
                 <label class="form-label">Autores</label>
                 <div id="autores-container">
                     @forelse ($livro->autores as $autor)
-                        <div class="mb-2 input-group autor-field">
-                            <select name="autores[]" class="form-select autor-select" data-selected="{{ $autor->codAu }}"></select>
-                            <button type="button" class="btn btn-danger remove-autor">
-                                <i class="bi bi-x-circle"></i>
-                            </button>
-                        </div>
+                    <div class="mb-2 input-group autor-field">
+                        <select name="autores[]" class="form-select autor-select"
+                            data-selected="{{ $autor->codAu }}"></select>
+                        <button type="button" class="btn btn-danger remove-autor">
+                            <i class="bi bi-x-circle"></i>
+                        </button>
+                    </div>
                     @empty
-                        <div class="mb-2 input-group autor-field">
-                            <select name="autores[]" class="form-select autor-select"></select>
-                            <button type="button" class="btn btn-danger remove-autor" style="display:none;">
-                                <i class="bi bi-x-circle"></i>
-                            </button>
-                        </div>
+                    <div class="mb-2 input-group autor-field">
+                        <select name="autores[]" class="form-select autor-select"></select>
+                        <button type="button" class="btn btn-danger remove-autor" style="display:none;">
+                            <i class="bi bi-x-circle"></i>
+                        </button>
+                    </div>
                     @endforelse
                 </div>
 
@@ -87,19 +90,20 @@
                 <label class="form-label">Assuntos</label>
                 <div id="assuntos-container">
                     @forelse ($livro->assuntos as $assunto)
-                        <div class="mb-2 input-group assunto-field">
-                            <select name="assuntos[]" class="form-select assunto-select" data-selected="{{ $assunto->codAs }}"></select>
-                            <button type="button" class="btn btn-danger remove-assunto">
-                                <i class="bi bi-x-circle"></i>
-                            </button>
-                        </div>
+                    <div class="mb-2 input-group assunto-field">
+                        <select name="assuntos[]" class="form-select assunto-select"
+                            data-selected="{{ $assunto->codAs }}"></select>
+                        <button type="button" class="btn btn-danger remove-assunto">
+                            <i class="bi bi-x-circle"></i>
+                        </button>
+                    </div>
                     @empty
-                        <div class="mb-2 input-group assunto-field">
-                            <select name="assuntos[]" class="form-select assunto-select"></select>
-                            <button type="button" class="btn btn-danger remove-assunto" style="display:none;">
-                                <i class="bi bi-x-circle"></i>
-                            </button>
-                        </div>
+                    <div class="mb-2 input-group assunto-field">
+                        <select name="assuntos[]" class="form-select assunto-select"></select>
+                        <button type="button" class="btn btn-danger remove-assunto" style="display:none;">
+                            <i class="bi bi-x-circle"></i>
+                        </button>
+                    </div>
                     @endforelse
                 </div>
 

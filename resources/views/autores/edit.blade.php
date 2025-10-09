@@ -12,19 +12,7 @@
             </a>
         </div>
 
-        {{-- Mensagem de sucesso --}}
-        @if(session('success'))
-        <x-alert type="success">
-            {{ session('success') }}
-        </x-alert>
-        @endif
-
-        {{-- Mensagem de erro genérica --}}
-        @if(session('error'))
-        <x-alert type="danger">
-            {{ session('error') }}
-        </x-alert>
-        @endif
+        <x-validation-messages />
 
         <form action="{{ route('autores.update', $autor->codAu) }}" method="POST">
             @csrf
@@ -35,15 +23,6 @@
                 <input type="text" name="nome" id="nome"
                     class="form-control @error('nome') is-invalid @enderror"
                     value="{{ old('nome', $autor->nome) }}" required>
-
-                {{-- Erro de validação específico --}}
-                @error('nome')
-                <x-alert type="danger">
-                    {{ $message }}
-                </x-alert>
-                @enderror
-            </div>
-
             <button type="submit" class="btn btn-primary">
                 <i class="bi bi-check-circle"></i> Atualizar
             </button>

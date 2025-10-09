@@ -13,6 +13,8 @@
             </a>
         </div>
 
+        <x-validation-messages />
+
         <!-- Formulário -->
         <form id="form-livro" action="{{ route('livros.store') }}" method="POST">
             @csrf
