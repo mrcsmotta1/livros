@@ -42,7 +42,7 @@ class AutorStoreRequest extends FormRequest
             'nome' => [
                 'required',
                 'string',
-                'min:3',
+                'min:2',
                 'max:40',
                 'regex:/^[A-Za-zÀ-ÿ0-9\s\'-]+$/', // permite apenas letras, números, espaços e alguns caracteres especiais
                 function ($attribute, $value, $fail) {

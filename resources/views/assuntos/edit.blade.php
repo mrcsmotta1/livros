@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
     <div class="container mt-4">
-        <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="mb-3 d-flex justify-content-between align-items-center">
             <h1>Editar Assunto</h1>
             <a href="{{ route('assuntos.index') }}" class="btn btn-secondary">
                 <i class="bi bi-arrow-left"></i> Voltar
@@ -44,9 +44,12 @@
                 @enderror
             </div>
 
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="btn btn-success me-2">
                 <i class="bi bi-check-circle"></i> Atualizar
             </button>
+            <a href="{{ route('assuntos.index') }}" class="btn btn-secondary">
+                <i class="bi bi-x-circle"></i> Cancelar
+            </a>
         </form>
     </div>
 </x-app-layout>

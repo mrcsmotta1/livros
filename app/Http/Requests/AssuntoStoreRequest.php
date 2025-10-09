@@ -21,8 +21,28 @@ class AssuntoStoreRequest extends FormRequest
      */
     public function rules(): array
     {
+        $assuntoId = $this->route('assunto');
+
+        $uniqueRule = 'unique:assunto,descricao';
+
+        if ($assuntoId) {
+            $uniqueRule .= ',' . $assuntoId . ',codAs';
+        }
+
         return [
-            'descricao' => 'required|string|min:3|max:20|unique:assunto,descricao',
+            'descricao' => [
+                'required',
+                'string',
+                'min:2',
+                'max:20',
+                'regex:/^[A-Za-zÀ-ÿ0-9\s\'-]+$/', // permite apenas letras, números, espaços e alguns caracteres especiais
+                function ($attribute, $value, $fail) {
+                    if (trim($value) === '') {
+                        $fail('O nome não pode conter apenas espaços em branco.');
+                    }
+                },
+                $uniqueRule,
+            ],
         ];
     }
 
