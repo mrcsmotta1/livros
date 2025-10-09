@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Livro;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +17,7 @@ class LivrosController extends Controller
         $livros = Livro::with([
             'autores'  => fn($q) => $q->orderBy('livro_autor.id'),
             'assuntos' => fn($q) => $q->orderBy('livro_assunto.id'),
-        ])->orderBy('titulo')
+        ])->orderBy('created_at', 'desc')
             ->paginate(10);
 
         return view('livros.index', compact('livros'));

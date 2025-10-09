@@ -12,7 +12,7 @@ class Livro extends Model
 {
     use HasFactory;
 
-    protected $table = 'livros';
+    protected $table = 'livro';
     protected $primaryKey = 'codl';
     public $incrementing = true;
     protected $keyType = 'int';

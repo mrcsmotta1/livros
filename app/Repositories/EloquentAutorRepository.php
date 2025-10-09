@@ -2,7 +2,6 @@
 
 namespace App\Repositories;
 
-use App\Models\Assunto;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use App\Interfaces\Repositories\AutorRepositoryInterface;
