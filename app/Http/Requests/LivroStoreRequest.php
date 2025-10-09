@@ -30,7 +30,7 @@ class LivroStoreRequest extends FormRequest
             'editora'         => ['required', 'string', 'min:2', 'max:100'],
             'edicao'          => ['required', 'integer', 'min:1'],
             'ano_publicacao'  => ['required', 'integer', 'min:1500', "max:{$anoAtual}"],
-            'valor'           => ['required', 'numeric', 'gt:0'],
+            'valor'           => ['required', 'numeric', 'gt:0', 'lt:100000000'],
             'autores'         => ['required', 'array', 'min:1'],
             'autores.*'       => ['integer', 'exists:autor,"codAu"'],
             'assuntos'        => ['required', 'array', 'min:1'],
@@ -57,6 +57,7 @@ class LivroStoreRequest extends FormRequest
             'valor.required' => 'O valor é obrigatório.',
             'valor.numeric' => 'O valor deve ser numérico (ex: 10.50).',
             'valor.gt' => 'O valor deve ser maior que zero.',
+            'valor.lt' => 'O valor deve ser menor que 100.000.000,00.',
 
             'autores.required' => 'É necessário selecionar pelo menos um autor.',
             'autores.array' => 'O campo de autores deve ser uma lista.',

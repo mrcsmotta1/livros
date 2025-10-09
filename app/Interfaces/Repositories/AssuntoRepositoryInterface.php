@@ -3,11 +3,11 @@
 namespace App\Interfaces\Repositories;
 
 use App\Models\Assunto;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 interface AssuntoRepositoryInterface
 {
-    public function getAllAssuntos(): Collection;
+    public function getAllAssuntos(int $perPage = 10): LengthAwarePaginator;
 
     public function findAssuntoById(int $codAs): Assunto;
 

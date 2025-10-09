@@ -15,7 +15,12 @@ class LivrosController extends Controller
      */
     public function index()
     {
-        $livros = Livro::all();
+        $livros = Livro::with([
+            'autores'  => fn($q) => $q->orderBy('livro_autor.id'),
+            'assuntos' => fn($q) => $q->orderBy('livro_assunto.id'),
+        ])->orderBy('titulo')
+            ->paginate(10);
+
         return view('livros.index', compact('livros'));
     }
 
@@ -42,15 +47,11 @@ class LivrosController extends Controller
             ]);
 
             if ($request->autores) {
-                foreach ($request->autores as $index => $autorId) {
-                    $livro->autores()->attach($autorId, ['ordem' => $index + 1]);
-                }
+                $livro->autores()->sync($request->autores);
             }
 
             if ($request->assuntos) {
-                foreach ($request->assuntos as $index => $assuntoId) {
-                    $livro->assuntos()->attach($assuntoId, ['ordem' => $index + 1]);
-                }
+                $livro->assuntos()->sync($request->assuntos);
             }
 
             return redirect()->route('livros.index')->with('success', 'Livro criado com sucesso!');
@@ -66,8 +67,8 @@ class LivrosController extends Controller
     public function show(string $id)
     {
         $livro = Livro::with([
-            'autores' => fn($q) => $q->orderBy('livro_autor.ordem'),
-            'assuntos' => fn($q) => $q->orderBy('livro_assunto.ordem'),
+            'autores'  => fn($q) => $q->orderBy('livro_autor.id'),
+            'assuntos' => fn($q) => $q->orderBy('livro_assunto.id'),
         ])->findOrFail($id);
 
         return view('livros.show', compact('livro'));
@@ -79,8 +80,8 @@ class LivrosController extends Controller
     public function edit(string $id)
     {
         $livro = Livro::with([
-            'autores' => fn($q) => $q->orderBy('livro_autor.ordem'),
-            'assuntos' => fn($q) => $q->orderBy('livro_assunto.ordem'),
+            'autores' => fn($q) => $q->orderBy('livro_autor.id'),
+            'assuntos' => fn($q) => $q->orderBy('livro_assunto.id'),
         ])->findOrFail($id);
 
         return view('livros.edit', compact('livro'));

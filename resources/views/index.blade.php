@@ -19,7 +19,7 @@
             </div>
 
             <div class="mb-3 col-md-4">
-                <a href="{{ route('livros.index') }}" class="text-decoration-none text-reset">
+                <a href="{{ route('autores.index') }}" class="text-decoration-none text-reset">
                     <div class="transition-all border-0 shadow-sm card hover-shadow">
                         <div class="text-center card-body">
                             <i class="bi bi-person-lines-fill text-success fs-2"></i>
@@ -102,7 +102,7 @@
                                         <i class="bi bi-eye"></i>
                                     </a>
                                     <a href="{{ route('livros.edit', $livro->codl) }}"
-                                        class="text-white btn btn-sm btn-warning">
+                                        class="btn btn-sm btn-warning">
                                         <i class="bi bi-pencil"></i>
                                     </a>
                                 </td>

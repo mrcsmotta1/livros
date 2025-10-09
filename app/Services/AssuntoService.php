@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Interfaces\Repositories\AssuntoRepositoryInterface;
 use App\Interfaces\Services\AssuntoServiceInterface;
 use App\Models\Assunto;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class AssuntoService implements AssuntoServiceInterface
 {
@@ -13,7 +13,7 @@ class AssuntoService implements AssuntoServiceInterface
     {
     }
 
-    public function listarAssuntos(): Collection
+    public function listarAssuntos(): LengthAwarePaginator
     {
         return $this->repository->getAllAssuntos();
     }

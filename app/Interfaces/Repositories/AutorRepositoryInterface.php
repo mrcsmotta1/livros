@@ -2,13 +2,12 @@
 
 namespace App\Interfaces\Repositories;
 
-use App\Models\Assunto;
-use Illuminate\Database\Eloquent\Collection;
 use App\Models\Autor;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 interface AutorRepositoryInterface
 {
-    public function getAllAutores(): Collection;
+    public function getAllAutores(int $perPage = 10): LengthAwarePaginator;
 
     public function findAutorById(int $codAu): ?Autor;
 

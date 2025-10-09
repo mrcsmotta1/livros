@@ -6,6 +6,7 @@ use App\Models\Assunto;
 use Exception;
 use App\Interfaces\Repositories\AssuntoRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class EloquentAssuntoRepository implements AssuntoRepositoryInterface
 {
@@ -15,9 +16,9 @@ class EloquentAssuntoRepository implements AssuntoRepositoryInterface
      * @return \Illuminate\Database\Eloquent\Collection
      * @throws Exception
      */
-    public function getAllAssuntos(): Collection
+    public function getAllAssuntos(int $perPage = 10): LengthAwarePaginator
     {
-        return Assunto::all();
+        return Assunto::orderBy('descricao')->paginate($perPage);
     }
 
     /**
