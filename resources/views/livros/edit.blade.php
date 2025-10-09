@@ -115,7 +115,7 @@
             <!-- Botões -->
             <div class="mt-4 d-flex justify-content-start">
                 <button type="submit" class="btn btn-success me-2">
-                    <i class="bi bi-check-circle"></i> Salvar Alterações
+                    <i class="bi bi-check-circle"></i> Atualizar
                 </button>
                 <a href="{{ route('livros.index') }}" class="btn btn-secondary">
                     <i class="bi bi-x-circle"></i> Cancelar
