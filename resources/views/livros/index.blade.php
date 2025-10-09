@@ -6,58 +6,100 @@
     </x-slot>
 
     <div class="container mt-4">
+        <!-- Título e botão -->
         <div class="mb-3 d-flex justify-content-between align-items-center">
             <h1>Lista de Livros</h1>
-            <!-- Botão para criar novo livro -->
-            <a href="{{ route('livros.create') }}" class="btn btn-primary">Criar Livro</a>
+            <a href="{{ route('livros.create') }}" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Cadastrar Livro
+            </a>
         </div>
 
+        <!-- Mensagens globais -->
         <x-validation-messages />
 
-        <!-- Tabela de livros -->
-        <table class="table align-middle table-bordered">
-            <thead class="table-light">
-                <tr>
-                    <th style="width: 5%">ID</th>
-                    <th>Título</th>
-                    <th>Editora</th>
-                    <th>Edição</th>
-                    <th>Ano</th>
-                    <th class="text-end">Valor (R$)</th>
-                    <th style="width: 20%" class="text-center">Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                @forelse($livros as $livro)
-                <tr>
-                    <td>{{ $livro->codl }}</td>
-                    <td>{{ $livro->titulo }}</td>
-                    <td>{{ $livro->editora ?? '-' }}</td>
-                    <td>{{ $livro->edicao ?? '-' }}</td>
-                    <td>{{ $livro->ano_publicacao ?? '-' }}</td>
-                    <td class="text-end">{{ number_format($livro->valor ?? 0, 2, ',', '.') }}</td>
-                    <td class="text-center">
-                        <a href="{{ route('livros.show', $livro->codl) }}" class="btn btn-sm btn-info">
-                            <i class="bi bi-eye"></i> Ver
-                        </a>
-                        <a href="{{ route('livros.edit', $livro->codl) }}" class="btn btn-sm btn-warning">
-                            <i class="bi bi-pencil"></i> Editar
-                        </a>
-                        <form action="{{ route('livros.destroy', $livro->codl) }}" method="POST" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-danger btn-delete">
-                                <i class="bi bi-trash"></i> Excluir
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="7" class="text-center">Nenhum livro cadastrado.</td>
-                </tr>
-                @endforelse
-            </tbody>
-        </table>
+        <!-- Card -->
+        <div class="border-0 shadow-sm card">
+            <div class="p-0 card-body">
+                @if($livros->isEmpty())
+                <p class="p-3 mb-0 text-center text-muted">Nenhum livro cadastrado.</p>
+                @else
+                <div class="table-responsive">
+                    <table class="table mb-0 align-middle table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Título</th>
+                                <th>Editora</th>
+                                <th>Ano</th>
+                                <th>Valor</th>
+                                <th>Autores</th>
+                                <th>Assuntos</th>
+                                <th style="width: 10%" class="text-center">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($livros as $livro)
+                            <tr>
+                                <td>{{ $livro->titulo }}</td>
+                                <td>{{ $livro->editora }}</td>
+                                <td>{{ $livro->ano_publicacao ?? '—' }}</td>
+                                <td class="text-start" style="white-space: nowrap;">
+                                    <span class="fw-semibold text-success">
+                                        R$ {{ number_format($livro->valor, 2, ',', '.') }}
+                                    </span>
+                                </td>
+
+
+                                <!-- Autores -->
+                                <td>
+                                    @forelse($livro->autores as $autor)
+                                    <span class="mb-1 badge bg-primary me-1">
+                                        {{ $autor->nome }}
+                                    </span>
+                                    @empty
+                                    —
+                                    @endforelse
+                                </td>
+
+                                <!-- Assuntos -->
+                                <td>
+                                    @forelse($livro->assuntos as $assunto)
+                                    <span class="mb-1 badge bg-secondary me-1">
+                                        {{ $assunto->descricao }}
+                                    </span>
+                                    @empty
+                                    —
+                                    @endforelse
+                                </td>
+
+                                <!-- Ações -->
+                                <td class="text-center">
+                                    <a href="{{ route('livros.show', $livro->codl) }}" class="btn btn-sm btn-info">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+
+                                    <a href="{{ route('livros.edit', $livro->codl) }}" class="btn btn-sm btn-warning">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+
+                                    <form action="{{ route('livros.destroy', $livro->codl) }}" method="POST"
+                                        class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger btn-delete">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    <div class="mt-3 d-flex justify-content-center">
+                        {{ $livros->links('pagination::bootstrap-5') }}
+                    </div>
+                </div>
+                @endif
+            </div>
+        </div>
     </div>
 </x-app-layout>

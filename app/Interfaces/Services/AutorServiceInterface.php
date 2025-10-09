@@ -2,12 +2,12 @@
 
 namespace App\Interfaces\Services;
 
-use Illuminate\Database\Eloquent\Collection;
 use App\Models\Autor;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 interface AutorServiceInterface
 {
-    public function listarAutores(): Collection;
+    public function listarAutores(): LengthAwarePaginator;
     public function buscarPorId(int $codAu): ?Autor;
     public function criarAutor(array $dados): Autor;
     public function atualizarAutor(int $codAu, array $dados): Autor;

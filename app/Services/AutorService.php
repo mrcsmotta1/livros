@@ -2,16 +2,16 @@
 
 namespace App\Services;
 
-use Illuminate\Database\Eloquent\Collection;
 use App\Models\Autor;
 use App\Interfaces\Services\AutorServiceInterface;
 use App\Interfaces\Repositories\AutorRepositoryInterface;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class AutorService implements AutorServiceInterface
 {
     public function __construct(protected AutorRepositoryInterface $repository) {}
 
-    public function listarAutores(): Collection
+    public function listarAutores(): LengthAwarePaginator
     {
         return $this->repository->getAllAutores();
     }

@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use App\Interfaces\Repositories\AutorRepositoryInterface;
 use App\Models\Autor;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class EloquentAutorRepository implements AutorRepositoryInterface
 {
@@ -16,9 +17,9 @@ class EloquentAutorRepository implements AutorRepositoryInterface
      * @return \Illuminate\Database\Eloquent\Collection
      * @throws Exception
      */
-    public function getAllAutores(): Collection
+    public function getAllAutores(int $perPage = 10): LengthAwarePaginator
     {
-        return Autor::all();
+        return Autor::orderBy('nome')->paginate($perPage);
     }
 
     /**

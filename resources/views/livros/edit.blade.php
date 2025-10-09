@@ -62,7 +62,7 @@
             <div class="mb-3">
                 <label class="form-label">Autores</label>
                 <div id="autores-container">
-                    @forelse ($livro->autores as $autor)
+                    @forelse ($livro->autores->sortBy('pivot.id', SORT_NUMERIC) as $autor)
                     <div class="mb-2 input-group autor-field">
                         <select name="autores[]" class="form-select autor-select"
                             data-selected="{{ $autor->codAu }}"></select>
@@ -89,7 +89,7 @@
             <div class="mb-3">
                 <label class="form-label">Assuntos</label>
                 <div id="assuntos-container">
-                    @forelse ($livro->assuntos as $assunto)
+                    @forelse ($livro->assuntos->sortBy('pivot.ordem') as $assunto)
                     <div class="mb-2 input-group assunto-field">
                         <select name="assuntos[]" class="form-select assunto-select"
                             data-selected="{{ $assunto->codAs }}"></select>
