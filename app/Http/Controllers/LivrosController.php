@@ -4,21 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Livro;
 use Exception;
-use Illuminate\Support\Facades\DB;
 use App\Http\Requests\LivroStoreRequest;
+use App\Interfaces\Services\LivroServiceInterface;
 
 class LivrosController extends Controller
 {
+
+    public function __construct(protected LivroServiceInterface $service) {}
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $livros = Livro::with([
-            'autores'  => fn($q) => $q->orderBy('livro_autor.id'),
-            'assuntos' => fn($q) => $q->orderBy('livro_assunto.id'),
-        ])->orderBy('created_at', 'desc')
-            ->paginate(10);
+        $livros = $this->service->listarLivros();
 
         return view('livros.index', compact('livros'));
     }
@@ -37,13 +36,7 @@ class LivrosController extends Controller
     public function store(LivroStoreRequest $request)
     {
         try {
-            $livro = Livro::create([
-                'titulo' => $request->titulo,
-                'editora' => $request->editora,
-                'edicao' => $request->edicao,
-                'ano_publicacao' => $request->ano_publicacao,
-                'valor' => $request->valor,
-            ]);
+            $livro = $this->service->criarLivros($request->validated());
 
             if ($request->autores) {
                 $livro->autores()->sync($request->autores);
@@ -65,10 +58,7 @@ class LivrosController extends Controller
      */
     public function show(string $id)
     {
-        $livro = Livro::with([
-            'autores'  => fn($q) => $q->orderBy('livro_autor.id'),
-            'assuntos' => fn($q) => $q->orderBy('livro_assunto.id'),
-        ])->findOrFail($id);
+        $livro = $this->service->buscarPorId($id);
 
         return view('livros.show', compact('livro'));
     }
@@ -78,10 +68,7 @@ class LivrosController extends Controller
      */
     public function edit(string $id)
     {
-        $livro = Livro::with([
-            'autores' => fn($q) => $q->orderBy('livro_autor.id'),
-            'assuntos' => fn($q) => $q->orderBy('livro_assunto.id'),
-        ])->findOrFail($id);
+        $livro = $this->service->buscarPorId($id);
 
         return view('livros.edit', compact('livro'));
     }
@@ -91,39 +78,11 @@ class LivrosController extends Controller
      */
     public function update(LivroStoreRequest $request, string $id)
     {
-        DB::beginTransaction();
+        $livro = $this->service->atualizarLivro($id, $request->validated());
 
-        try {
-            $livro = Livro::with(['autores', 'assuntos'])->findOrFail($id);
-
-            // Normaliza o valor monetário
-            $valor = $request->input('valor');
-
-            $livro->update([
-                'titulo'          => $request->input('titulo'),
-                'editora'         => $request->input('editora'),
-                'edicao'          => $request->input('edicao'),
-                'ano_publicacao'  => $request->input('ano_publicacao'),
-                'valor'           => $valor,
-            ]);
-
-            $autores = $request->input('autores', []);
-            $assuntos = $request->input('assuntos', []);
-
-            $livro->autores()->sync($autores);
-            $livro->assuntos()->sync($assuntos);
-
-            DB::commit();
-
-            return redirect()
-                ->route('livros.show', $livro->codl)
-                ->with('success', 'Livro atualizado com sucesso!');
-        } catch (Exception $e) {
-            DB::rollBack();
-            return redirect()
-                ->route('livros.edit', $id)
-                ->with('error', 'Erro ao atualizar livro: ' . $e->getMessage());
-        }
+        return redirect()
+            ->route('livros.show', $livro->codl)
+            ->with('success', 'Livro atualizado com sucesso!');
     }
 
     /**
@@ -131,26 +90,9 @@ class LivrosController extends Controller
      */
     public function destroy(string $id)
     {
-        DB::beginTransaction();
-
-        try {
-            $livro = Livro::findOrFail($id);
-
-            $livro->autores()->detach();
-            $livro->assuntos()->detach();
-
-            $livro->delete();
-
-            DB::commit();
-
-            return redirect()
-                ->route('livros.index')
-                ->with('success', 'Livro excluído com sucesso!');
-        } catch (Exception $e) {
-            DB::rollBack();
-            return redirect()
-                ->route('livros.index')
-                ->with('error', 'Erro ao excluir livro: ' . $e->getMessage());
-        }
+        $this->service->deletarLivro($id);
+        return redirect()
+            ->route('livros.index')
+            ->with('success', 'Livro excluído com sucesso!');
     }
 }
