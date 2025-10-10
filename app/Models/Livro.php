@@ -29,13 +29,15 @@ class Livro extends Model
     public function autores(): BelongsToMany
     {
         return $this->belongsToMany(Autor::class, 'livro_autor', 'livro_codl', 'autor_codAu')
-            ->withTimestamps();
+            ->withTimestamps()
+            ->orderBy('livro_autor.id');
     }
 
     public function assuntos(): BelongsToMany
     {
         return $this->belongsToMany(Assunto::class, 'livro_assunto', 'livro_codl', 'assunto_codAs')
-            ->withTimestamps();
+            ->withTimestamps()
+            ->orderBy('livro_assunto.id');;
     }
 
     public function getAutorPrincipalAttribute(): object|null

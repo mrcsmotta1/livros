@@ -11,6 +11,10 @@ use App\Interfaces\Repositories\AutorRepositoryInterface;
 use App\Repositories\EloquentAutorRepository;
 use App\Interfaces\Services\AutorServiceInterface;
 use App\Services\AutorService;
+use App\Interfaces\Repositories\LivroRepositoryInterface;
+use App\Repositories\EloquentLivroRepository;
+use App\Interfaces\Services\LivroServiceInterface;
+use App\Services\LivroService;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -33,5 +37,8 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(AutorRepositoryInterface::class, EloquentAutorRepository::class);
         $this->app->bind(AutorServiceInterface::class, AutorService::class);
+
+        $this->app->bind(LivroRepositoryInterface::class, EloquentLivroRepository::class);
+        $this->app->bind(LivroServiceInterface::class, LivroService::class);
     }
 }
