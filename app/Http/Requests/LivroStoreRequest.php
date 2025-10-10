@@ -28,7 +28,7 @@ class LivroStoreRequest extends FormRequest
         return [
             'titulo'          => ['required', 'string', 'min:2', 'max:100'],
             'editora'         => ['required', 'string', 'min:2', 'max:100'],
-            'edicao'          => ['required', 'integer', 'min:1'],
+            'edicao'          => ['required', 'integer', 'min:1', 'max:2147483647'],
             'ano_publicacao'  => ['required', 'integer', 'min:1500', "max:{$anoAtual}"],
             'valor'           => ['required', 'numeric', 'gt:0', 'lt:100000000'],
             'autores'         => ['required', 'array', 'min:1'],
@@ -49,6 +49,7 @@ class LivroStoreRequest extends FormRequest
 
             'edicao.integer' => 'A edição deve ser um número inteiro.',
             'edicao.min' => 'A edição deve ser no mínimo 1.',
+            'edicao.max' => 'A edição deve ser no máximo 2147483647.',
 
             'ano_publicacao.integer' => 'O ano de publicação deve ser numérico.',
             'ano_publicacao.min' => 'O ano de publicação não pode ser anterior a 1500.',
