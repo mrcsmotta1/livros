@@ -48,7 +48,6 @@ class LivrosController extends Controller
 
             return redirect()->route('livros.index')->with('success', 'Livro criado com sucesso!');
         } catch (Exception $e) {
-            // TODO: Remover $e->getMessage e logar o erro em arquivo txt.log
             return redirect()->route('livros.index')->with('error', 'Erro ao criar livro: ' . $e->getMessage());
         }
     }
@@ -56,20 +55,16 @@ class LivrosController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Livro $livro)
     {
-        $livro = $this->service->buscarPorId($id);
-
         return view('livros.show', compact('livro'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Livro $livro)
     {
-        $livro = $this->service->buscarPorId($id);
-
         return view('livros.edit', compact('livro'));
     }
 

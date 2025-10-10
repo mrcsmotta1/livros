@@ -19,14 +19,14 @@
 
             <div class="mb-3">
                 <label for="nome" class="form-label">Nome</label>
-                <input type="text" name="nome" id="nome"
-                    class="form-control @error('nome') is-invalid @enderror" value="{{ old('nome') }}"
-                    required>
+                <input type="text" name="nome" id="nome" class="form-control @error('nome') is-invalid @enderror"
+                    value="{{ old('nome') }}" required>
             </div>
 
-            <button type="submit" class="btn btn-primary">
-                <i class="bi bi-check-circle"></i> Criar
-            </button>
+            <div class="mt-4 d-flex justify-content-start">
+                <button type="submit" class="btn btn-success me-2">Salvar</button>
+                <a href="{{ route('livros.index') }}" class="btn btn-secondary">Cancelar</a>
+            </div>
         </form>
     </div>
 </x-app-layout>

@@ -1,3 +1,27 @@
 @import "~bootstrap/scss/bootstrap";
 @import "bootstrap-icons/font/bootstrap-icons.css";
 
+/* Corrige o alinhamento vertical do botão remover com o select */
+.input-group .btn.remove-autor,
+.input-group .btn.remove-assunto {
+    height: calc(2.4rem + 2px);
+    padding: 0 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+/* Garante que o Select2 tenha a mesma altura do botão */
+.input-group .select2-container .select2-selection--single {
+    height: calc(2.4rem + 2px) !important;
+    line-height: 2.4rem !important;
+    padding: 0 0.375rem;
+    border-radius: 0.375rem 0 0 0.375rem;
+}
+
+/* Mantém proporção entre select e botão */
+.input-group .select2-container {
+    flex: 1;
+}
