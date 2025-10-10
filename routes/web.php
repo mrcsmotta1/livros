@@ -23,9 +23,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::resource('assuntos', AssuntoController::class);
-    Route::resource('autores', AutorController::class);
-    Route::resource('livros', LivrosController::class);
+    Route::resource('assuntos', AssuntoController::class)->whereNumber('assunto');
+    Route::resource('autores', AutorController::class)->whereNumber('autore');
+    Route::resource('livros', LivrosController::class)->whereNumber('livro');
 });
 
 require __DIR__.'/auth.php';
