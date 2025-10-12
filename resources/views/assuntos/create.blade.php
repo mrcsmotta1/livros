@@ -24,10 +24,13 @@
                 <div class="card-body">
                     <ul class="list-group">
                         <li class="list-group-item">
-                            <label for="descricao" class="form-label"><strong>Descrição: </strong></label>
+                            <label for="descricao" class="form-label"><strong>Descrição</strong></label>
                             <input type="text" name="descricao" id="descricao"
                                 class="form-control @error('descricao') is-invalid @enderror"
-                                value="{{ old('descricao') }}" required>
+                                value="{{ old('descricao') }}">
+                            @error('descricao')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
 
                         </li>
                     </ul>

@@ -21,7 +21,7 @@
 
             <div class="mt-4 shadow-sm card">
                 <div class="card-header bg-light fw-semibold">
-                    <i class="bi bi-tags"></i> Assunto
+                    <i class="bi bi-people"></i> Livros
                 </div>
                 <div class="card-body">
                     <ul class="list-group">
@@ -31,7 +31,7 @@
                                 <div class="col-md-6">
                                     <label for="titulo" class="form-label">Título</label>
                                     <input type="text" name="titulo" id="titulo" class="form-control"
-                                        value="{{ old('titulo', $livro->titulo) }}" required>
+                                        value="{{ old('titulo', $livro->titulo) }}">
                                 </div>
 
                                 <div class="col-md-6">

@@ -19,7 +19,7 @@
         <!-- Card principal -->
         <div class="mt-4 shadow-sm card">
             <div class="card-header bg-light fw-semibold">
-                <i class="bi bi-book"></i>
+                <i class="bi bi-people"></i> Livros
             </div>
             <div class="card-body">
                 <ul class="list-group">

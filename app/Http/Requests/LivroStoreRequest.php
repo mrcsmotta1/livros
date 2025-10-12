@@ -41,10 +41,10 @@ class LivroStoreRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'titulo.required' => 'O título é obrigatório.',
+            'titulo.required' => 'O campo título é obrigatório.',
             'titulo.max' => 'O título não pode ter mais de 100 caracteres.',
 
-            'editora.required' => 'A editora é obrigatória.',
+            'editora.required' => 'O campo editora é obrigatório.',
             'editora.max' => 'A editora não pode ter mais de 100 caracteres.',
 
             'edicao.integer' => 'A edição deve ser um número inteiro.',
@@ -55,7 +55,7 @@ class LivroStoreRequest extends FormRequest
             'ano_publicacao.min' => 'O ano de publicação não pode ser anterior a 1500.',
             'ano_publicacao.max' => 'O ano de publicação não pode ser maior que o ano atual.',
 
-            'valor.required' => 'O valor é obrigatório.',
+            'valor.required' => 'O campo valor é obrigatório.',
             'valor.numeric' => 'O valor deve ser numérico (ex: 10.50).',
             'valor.gt' => 'O valor deve ser maior que zero.',
             'valor.lt' => 'O valor deve ser menor que 100.000.000,00.',
