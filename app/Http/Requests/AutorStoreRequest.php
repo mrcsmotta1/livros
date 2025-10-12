@@ -58,7 +58,7 @@ class AutorStoreRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'nome.required' => 'O nome do autor é obrigatório.',
+            'nome.required' => 'O campo nome é obrigatório.',
             'nome.string'   => 'O nome deve ser um texto válido.',
             'nome.max'      => 'O nome pode ter no máximo 40 caracteres.',
             'nome.regex'    => 'O nome deve conter apenas letras, números, espaços, apóstrofos ou hífens (sem símbolos).',
