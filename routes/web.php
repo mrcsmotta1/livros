@@ -7,6 +7,7 @@ use App\Http\Controllers\AssuntoController;
 use App\Http\Controllers\AutorController;
 use App\Http\Controllers\LivrosController;
 use App\Http\Controllers\IndexController;
+use App\Http\Controllers\RelatorioAutorController;
 
 Route::get('/', function () {
     if (Auth::check()) {
@@ -26,6 +27,11 @@ Route::middleware('auth')->group(function () {
     Route::resource('assuntos', AssuntoController::class)->whereNumber('assunto');
     Route::resource('autores', AutorController::class)->whereNumber('autore');
     Route::resource('livros', LivrosController::class)->whereNumber('livro');
+
+    Route::prefix('relatorios/autores')->group(function () {
+        Route::get('/', [RelatorioAutorController::class, 'index'])->name('relatorios.autores.index');
+        Route::get('/csv', [RelatorioAutorController::class, 'exportCsv'])->name('relatorios.autores.csv');
+    });
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
