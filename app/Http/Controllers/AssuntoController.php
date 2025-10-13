@@ -56,6 +56,13 @@ class AssuntoController extends Controller
     {
         try {
             $assunto = $this->service->buscarPorId($codAs);
+
+            if (!$assunto) {
+                return redirect()
+                    ->route('assuntos.index')
+                    ->with('error', 'Assunto não encontrado.');
+            }
+
             return view('assuntos.show', compact('assunto'));
         } catch (ModelNotFoundException $e) {
             return redirect()
@@ -71,6 +78,13 @@ class AssuntoController extends Controller
     {
         try {
             $assunto = $this->service->buscarPorId($codAs);
+
+            if (!$assunto) {
+                return redirect()
+                    ->route('assuntos.index')
+                    ->with('error', 'Assunto não encontrado.');
+            }
+
             return view('assuntos.edit', compact('assunto'));
         } catch (ModelNotFoundException $e) {
             return redirect()
