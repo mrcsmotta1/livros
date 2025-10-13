@@ -36692,6 +36692,7 @@ window.$ = (jquery__WEBPACK_IMPORTED_MODULE_4___default());
 window.jQuery = (jquery__WEBPACK_IMPORTED_MODULE_4___default());
 alpinejs__WEBPACK_IMPORTED_MODULE_2__["default"].start();
 document.addEventListener("DOMContentLoaded", function () {
+  var _window$ROUTES;
   // === Máscaras de campos ===
   inputmask__WEBPACK_IMPORTED_MODULE_3___default()({
     mask: "9999"
@@ -36911,6 +36912,22 @@ document.addEventListener("DOMContentLoaded", function () {
         }
       });
     });
+  });
+  var form = document.querySelector("form");
+  if (form) {
+    form.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        form.submit();
+      }
+    });
+  }
+  var formRelatoriosAutores = document.getElementById("relatorios-autores");
+  var exportButton = document.getElementById("btnExportarCsv");
+  if (!formRelatoriosAutores || !exportButton || !((_window$ROUTES = window.ROUTES) !== null && _window$ROUTES !== void 0 && _window$ROUTES.exportCsv)) return;
+  exportButton.addEventListener("click", function () {
+    var params = new URLSearchParams(new FormData(formRelatoriosAutores)).toString();
+    window.open("".concat(window.ROUTES.exportCsv, "?").concat(params), "_blank");
   });
 });
 

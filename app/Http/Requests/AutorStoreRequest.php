@@ -46,8 +46,14 @@ class AutorStoreRequest extends FormRequest
                 'max:40',
                 'regex:/^[A-Za-zÀ-ÿ0-9\s\'-]+$/', // permite apenas letras, números, espaços e alguns caracteres especiais
                 function ($attribute, $value, $fail) {
-                    if (trim($value) === '') {
+                    $trimmed = trim($value);
+                    if ($trimmed === '') {
                         $fail('O nome não pode conter apenas espaços em branco.');
+                    }
+
+                    // Falha se não houver ao menos uma letra ou número (ex: "~~~~", "!!!")
+                    if (!preg_match('/[A-Za-zÀ-ÖØ-öø-ÿ0-9]/u', $trimmed)) {
+                        $fail('O campo nome deve conter letras ou números válidos.');
                     }
                 },
                 $uniqueRule,
@@ -58,7 +64,7 @@ class AutorStoreRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'nome.required' => 'O campo nome é obrigatório.',
+            'nome.required' => 'O nome do autor é obrigatório.',
             'nome.string'   => 'O nome deve ser um texto válido.',
             'nome.max'      => 'O nome pode ter no máximo 40 caracteres.',
             'nome.regex'    => 'O nome deve conter apenas letras, números, espaços, apóstrofos ou hífens (sem símbolos).',

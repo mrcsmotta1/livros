@@ -28,6 +28,9 @@
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('assuntos.index') ? 'active' : '' }}" href="{{ route('assuntos.index') }}">Assunto</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('relatorios.autores.*') ? 'active' : '' }}" href="{{ route('relatorios.autores.index') }}">Relatório Autor</a>
+                </li>
             </ul>
 
             <!-- Perfil à direita -->
