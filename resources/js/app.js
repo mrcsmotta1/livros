@@ -254,4 +254,32 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
     });
+
+    const form = document.querySelector("form");
+
+    if (form) {
+        form.addEventListener("keydown", function (e) {
+            if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                form.submit();
+            }
+        });
+    }
+
+    const formRelatoriosAutores = document.getElementById("relatorios-autores");
+    const exportButton = document.getElementById("btnExportarCsv");
+
+    if (
+        !formRelatoriosAutores ||
+        !exportButton ||
+        !window.ROUTES?.exportCsv
+    )
+        return;
+
+    exportButton.addEventListener("click", () => {
+        const params = new URLSearchParams(
+            new FormData(formRelatoriosAutores)
+        ).toString();
+        window.open(`${window.ROUTES.exportCsv}?${params}`, "_blank");
+    });
 });
