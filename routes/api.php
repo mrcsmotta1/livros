@@ -9,5 +9,6 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::get('/autores/search', [AutorController::class, 'search']);
-Route::get('/assuntos/search', [AssuntoController::class, 'search']);
+Route::get('/autores/search', [AutorController::class, 'search'])->name('api.autores.search');
+
+Route::get('/assuntos/search', [AssuntoController::class, 'search'])->name('api.assuntos.search');
