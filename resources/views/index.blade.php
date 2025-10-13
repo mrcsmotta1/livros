@@ -48,12 +48,12 @@
             <div class="bg-white card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">
                     <i class="bi bi-clock-history me-2 text-primary"></i>
-                    @if ($livrosCount === 0)
-                    Nenhum livro cadastrado
-                    @elseif ($livrosCount === 1)
-                    Último livro cadastrado
+                    @if ($ultimosLivros->count() === 0)
+                        Nenhum livro cadastrado
+                    @elseif ($ultimosLivros->count() === 1)
+                        Último livro cadastrado
                     @else
-                    Últimos {{ $livrosCount }} livros cadastrados
+                        Últimos {{ $ultimosLivros->count() }} livros cadastrados
                     @endif
                 </h5>
                 <a href="{{ route('livros.index') }}" class="btn btn-sm btn-outline-primary">
