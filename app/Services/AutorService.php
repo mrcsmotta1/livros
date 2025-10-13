@@ -16,7 +16,7 @@ class AutorService implements AutorServiceInterface
         return $this->repository->getAllAutores();
     }
 
-    public function buscarPorId(int $codAu): Autor
+    public function buscarPorId(int $codAu): ?Autor
     {
         return $this->repository->findAutorById($codAu);
     }

@@ -51,6 +51,14 @@ class AutorController extends Controller
     {
         try {
             $autor = $this->service->buscarPorId($codAu);
+
+            if (!$autor) {
+                return redirect()
+                    ->route('autores.index')
+                    ->with('error', 'Autor não encontrado.');
+            }
+
+
             return view('autores.show', compact('autor'));
         } catch (ModelNotFoundException $e) {
             return redirect()
@@ -66,6 +74,13 @@ class AutorController extends Controller
     {
         try {
             $autor = $this->service->buscarPorId($codAu);
+
+            if (!$autor) {
+                return redirect()
+                    ->route('autores.index')
+                    ->with('error', 'Autor não encontrado.');
+            }
+
             return view('autores.edit', compact('autor'));
         } catch (ModelNotFoundException $e) {
             return redirect()
@@ -117,7 +132,7 @@ class AutorController extends Controller
 
     public function search(Request $request)
     {
-          //Retorna itens do form Edit
+        //Retorna itens do form Edit
         if ($request->filled('id')) {
             $ids = (array) $request->get('id');
             $result = Autor::whereIn('codAu', $ids)
