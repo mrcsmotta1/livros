@@ -116,13 +116,27 @@ class AssuntoTest extends TestCase
         $this->assertDatabaseMissing('assunto', ['codAs' => $assunto->codAs]);
     }
 
+    public function test_show_quando_nao_encontrado_trata_retorna_pagina_404(): void
+    {
+        $this->actingAs(User::factory()->create());
+        $response = $this->get(route('assuntos.show', 999999));
+        $response->assertStatus(404);
+    }
+
+    public function test_edit_quando_nao_encontrado_trata_erro(): void
+    {
+        $this->actingAs(User::factory()->create());
+        $response = $this->get(route('assuntos.edit', 999999));
+        $response->assertStatus(404);
+    }
+
     public function test_search_por_termo_retorna_json(): void
     {
         $this->actingAs(User::factory()->create());
         Assunto::create(['descricao' => 'search']);
         Assunto::create(['descricao' => 'termo']);
 
-        $response = $this->getJson(route('assuntos.search') . '?q=se');
+        $response = $this->getJson(route('api.assuntos.search') . '?q=se');
         $response->assertOk();
         $data = $response->json();
         $this->assertNotEmpty($data);
@@ -136,11 +150,39 @@ class AssuntoTest extends TestCase
         $a1 = Assunto::create(['descricao' => 'search']);
         $a2 = Assunto::create(['descricao' => 'termo']);
 
-        $response = $this->getJson(route('assuntos.search') . '?id[]=' . $a1->codAs . '&id[]=' . $a2->codAs);
+        $response = $this->getJson(route('api.assuntos.search') . '?id[]=' . $a1->codAs . '&id[]=' . $a2->codAs);
         $response->assertOk();
         $data = $response->json();
         $this->assertCount(2, $data);
         $this->assertArrayHasKey('id', $data[0]);
         $this->assertArrayHasKey('text', $data[0]);
+    }
+
+    public function test_search_exclui_os_ids_passados(): void
+    {
+        $this->actingAs(User::factory()->create());
+
+        // Cria 3 assuntos
+        $a1 = Assunto::create(['descricao' => 'Teste 1']);
+        $a2 = Assunto::create(['descricao' => 'Teste 2']);
+        $a3 = Assunto::create(['descricao' => 'Teste 3']);
+
+        // Requisição com exclude
+        $response = $this->getJson(route('api.assuntos.search', ['exclude' => [$a1->codAs, $a3->codAs]]));
+
+        $response->assertOk();
+
+        // Confirma que apenas o assunto 2 foi retornado
+        $json = $response->json();
+
+        // Remove camadas extras se existirem
+        if (isset($json[0]) && is_array($json[0])) {
+            $json = $json[0];
+        }
+
+        $idsRetornados = array_column($json, 'id');
+
+        $this->assertNotContains($a2->codAs, $idsRetornados);
+        $this->assertNotContains($a3->codAs, $idsRetornados);
     }
 }

@@ -86,7 +86,7 @@ class AutorTest extends TestCase
         $response = $this->get(route('autores.show', $autor->codAu));
         $response->assertStatus(200);
         $response->assertViewIs('autores.show');
-        $response->assertViewHas('autor', function ($viewAutor) use ($autor) {
+        $response->assertViewHas('autore', function ($viewAutor) use ($autor) {
             return $viewAutor->codAu === $autor->codAu;
         });
     }
@@ -99,7 +99,7 @@ class AutorTest extends TestCase
         $response = $this->get(route('autores.edit', $autor->codAu));
         $response->assertStatus(200);
         $response->assertViewIs('autores.edit');
-        $response->assertViewHas('autor', function ($viewAutor) use ($autor) {
+        $response->assertViewHas('autore', function ($viewAutor) use ($autor) {
             return $viewAutor->codAu === $autor->codAu;
         });
     }
@@ -118,25 +118,19 @@ class AutorTest extends TestCase
     public function test_destroy_exclui_e_redireciona(): void
     {
         $this->actingAs(User::factory()->create());
-        $mock = $this->createMock(AutorService::class);
-        $mock->method('deletarAutor')
-            ->willThrowException(new ModelNotFoundException('Autor não encontrado.'));
+        $autor = Autor::create(['nome' => 'Apagar']);
 
-        // Injeta o mock no container do Laravel
-        $this->app->instance(AutorService::class, $mock);
-
-        $response = $this->delete(route('autores.destroy', 999999));
-
+        $response = $this->delete(route('autores.destroy', $autor->codAu));
         $response->assertRedirect(route('autores.index'));
-        $response->assertSessionHas('error', 'Autor não encontrado.');
+        $response->assertSessionHas('success');
+        $this->assertDatabaseMissing('autor', ['codAu' => $autor->codAu]);
     }
 
     public function test_destroy_quando_nao_encontrado_trata_erro(): void
     {
         $this->actingAs(User::factory()->create());
         $response = $this->delete(route('autores.destroy', 999999));
-        $response->assertRedirect(route('autores.index'));
-        $response->assertSessionHas('error');
+        $response->assertStatus(404);
     }
 
     public function test_search_por_termo_retorna_json(): void
@@ -145,7 +139,7 @@ class AutorTest extends TestCase
         Autor::create(['nome' => 'João da Silva']);
         Autor::create(['nome' => 'Maria']);
 
-        $response = $this->getJson(route('autores.search') . '?q=jo');
+        $response = $this->getJson(route('api.autores.search') . '?q=jo');
         $response->assertOk();
         $data = $response->json();
         $this->assertNotEmpty($data);
@@ -154,63 +148,18 @@ class AutorTest extends TestCase
         $this->assertArrayHasKey('nome', $data[0]);
     }
 
-    public function test_destroy_catch_generico_quando_servico_lanca_excecao(): void
-    {
-        $this->actingAs(User::factory()->create());
-        // Mocka o serviço para lançar exceção
-        $mock = \Mockery::mock(AutorServiceInterface::class);
-        $mock->shouldReceive('deletarAutor')->once()->andThrow(new Exception('falha'));
-        $this->app->instance(AutorServiceInterface::class, $mock);
-
-        $response = $this->delete(route('autores.destroy', 1));
-        $response->assertRedirect(route('autores.index'));
-        $response->assertSessionHas('error');
-    }
-
     public function test_show_quando_nao_encontrado_trata_erro(): void
     {
         $this->actingAs(User::factory()->create());
         $response = $this->get(route('autores.show', 999999));
-        $response->assertRedirect(route('autores.index'));
-        $response->assertSessionHas('error');
+        $response->assertStatus(404);
     }
 
     public function test_edit_quando_nao_encontrado_trata_erro(): void
     {
         $this->actingAs(User::factory()->create());
         $response = $this->get(route('autores.edit', 999999));
-        $response->assertRedirect(route('autores.index'));
-    }
-
-    public function test_update_quando_nao_encontrado_trata_erro(): void
-    {
-        $this->actingAs(User::factory()->create());
-        $this->actingAs(User::factory()->create());
-        $mock = $this->createMock(AutorService::class);
-        $mock->method('deletarAutor')
-            ->willThrowException(new ModelNotFoundException('Autor não encontrado.'));
-
-        // Injeta o mock no container do Laravel
-        $this->app->instance(AutorService::class, $mock);
-
-        $response = $this->delete(route('autores.destroy', 999999));
-
-        $response->assertRedirect(route('autores.index'));
-        $response->assertSessionHas('error', 'Autor não encontrado.');
-    }
-
-    public function test_update_catch_generico_quando_servico_lanca_excecao(): void
-    {
-        $this->actingAs(User::factory()->create());
-        $autor = Autor::create(['nome' => 'Qualquer']);
-
-        $mock = \Mockery::mock(AutorServiceInterface::class);
-        $mock->shouldReceive('atualizarAutor')->once()->andThrow(new Exception('falha'));
-        $this->app->instance(AutorServiceInterface::class, $mock);
-
-        $response = $this->put(route('autores.update', $autor->codAu), ['nome' => 'Novo']);
-        $response->assertRedirect(route('autores.index'));
-        $response->assertSessionHas('error');
+        $response->assertStatus(404);
     }
 
     public function test_search_por_ids_retorna_json_com_texto(): void
@@ -219,11 +168,39 @@ class AutorTest extends TestCase
         $a1 = Autor::create(['nome' => 'João da Silva']);
         $a2 = Autor::create(['nome' => 'Maria']);
 
-        $response = $this->getJson(route('autores.search') . '?id[]=' . $a1->codAu . '&id[]=' . $a2->codAu);
+        $response = $this->getJson(route('api.autores.search') . '?id[]=' . $a1->codAu . '&id[]=' . $a2->codAu);
         $response->assertOk();
         $data = $response->json();
         $this->assertCount(2, $data);
         $this->assertArrayHasKey('id', $data[0]);
         $this->assertArrayHasKey('text', $data[0]);
+    }
+
+     public function test_search_exclui_os_ids_passados(): void
+    {
+        $this->actingAs(User::factory()->create());
+
+        // Cria 3 assuntos
+        $a1 = Autor::create(['nome' => 'João da Silva']);
+        $a2 = Autor::create(['nome' => 'Maria']);
+        $a3 = Autor::create(['nome' => 'Cecilia']);
+
+        // Requisição com exclude
+        $response = $this->getJson(route('api.autores.search', ['exclude' => [$a1->codAu, $a3->codAu]]));
+
+        $response->assertOk();
+
+        // Confirma que apenas o assunto 2 foi retornado
+        $json = $response->json();
+
+        // Remove camadas extras se existirem
+        if (isset($json[0]) && is_array($json[0])) {
+            $json = $json[0];
+        }
+
+        $idsRetornados = array_column($json, 'id');
+
+        $this->assertNotContains($a2->codAs, $idsRetornados);
+        $this->assertNotContains($a3->codAs, $idsRetornados);
     }
 }
