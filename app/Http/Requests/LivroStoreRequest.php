@@ -26,8 +26,30 @@ class LivroStoreRequest extends FormRequest
         $anoAtual = Carbon::now()->year;
 
         return [
-            'titulo'          => ['required', 'string', 'min:2', 'max:100'],
-            'editora'         => ['required', 'string', 'min:2', 'max:100'],
+            'titulo'          => [
+                'required',
+                'string',
+                'min:2',
+                'max:40',
+                // permite apenas letras (com acento), números, espaço, hífen, apóstrofo e vírgula
+                'regex:/^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s\'\-\.\,]+$/u',
+                function ($attribute, $value, $fail) {
+                    // Remove espaços para evitar só-branco
+                    $trimmed = trim($value);
+
+                    // Falha se vazio depois de trim (só espaços)
+                    if ($trimmed === '') {
+                        $fail('O campo nome não pode conter apenas espaços em branco.');
+                        return;
+                    }
+
+                    // Falha se não houver ao menos uma letra ou número (ex: "~~~~", "!!!")
+                    if (!preg_match('/[A-Za-zÀ-ÖØ-öø-ÿ0-9]/u', $trimmed)) {
+                        $fail('O campo nome deve conter letras ou números válidos.');
+                    }
+                },
+            ],
+            'editora'         => ['required', 'string', 'min:2', 'max:40'],
             'edicao'          => ['required', 'integer', 'min:1', 'max:2147483647'],
             'ano_publicacao'  => ['required', 'integer', 'min:1500', "max:{$anoAtual}"],
             'valor'           => ['required', 'numeric', 'gt:0', 'lt:100000000'],
@@ -42,10 +64,10 @@ class LivroStoreRequest extends FormRequest
     {
         return [
             'titulo.required' => 'O campo título é obrigatório.',
-            'titulo.max' => 'O título não pode ter mais de 100 caracteres.',
+            'titulo.max' => 'O título não pode ter mais de 40 caracteres.',
 
             'editora.required' => 'O campo editora é obrigatório.',
-            'editora.max' => 'A editora não pode ter mais de 100 caracteres.',
+            'editora.max' => 'A editora não pode ter mais de 40 caracteres.',
 
             'edicao.integer' => 'A edição deve ser um número inteiro.',
             'edicao.min' => 'A edição deve ser no mínimo 1.',
@@ -58,7 +80,7 @@ class LivroStoreRequest extends FormRequest
             'valor.required' => 'O campo valor é obrigatório.',
             'valor.numeric' => 'O valor deve ser numérico (ex: 10.50).',
             'valor.gt' => 'O valor deve ser maior que zero.',
-            'valor.lt' => 'O valor deve ser menor que 100.000.000,00.',
+            'valor.lt' => 'O valor não pode ultrapassar 100 milhões.',
 
             'autores.required' => 'É necessário selecionar pelo menos um autor.',
             'autores.array' => 'O campo de autores deve ser uma lista.',
