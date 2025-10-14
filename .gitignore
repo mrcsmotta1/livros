@@ -26,3 +26,14 @@ Thumbs.db
 # Coverage reports
 /storage/coverage
 /public/coverage
+
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/logs/*
+
+/bootstrap/cache/*.php
+!/bootstrap/cache/.gitignore
+/storage/framework/*
+!/storage/framework/.gitignore
+/storage/logs/*
