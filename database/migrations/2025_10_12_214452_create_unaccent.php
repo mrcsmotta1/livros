@@ -10,6 +10,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (DB::getDriverName() === 'sqlite') {
+            // SQLite não suporta extensões como unaccent; ignorar em ambiente de teste.
+            return;
+        }
         DB::statement('CREATE EXTENSION IF NOT EXISTS unaccent;');
     }
 
@@ -18,6 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
+        if (DB::getDriverName() === 'sqlite') {
+            return;
+        }
         DB::statement('DROP EXTENSION IF EXISTS unaccent;');
     }
 };

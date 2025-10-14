@@ -22,13 +22,13 @@
                         <label for="nome" class="form-label">Nome</label>
                         <input type="text" name="nome" id="nome"
                             class="form-control @error('nome') is-invalid @enderror"
-                            value="{{ old('nome', $autor->nome) }}" required>
+                            value="{{ old('nome', $autore->nome) }}" required>
                     </li>
                 </ul>
             </div>
 
             <div class="mt-4">
-                <a href="{{ route('autores.edit', $autor->codAu) }}" class="btn btn-warning me-2">
+                <a href="{{ route('autores.edit', ['autore' => $autore->codAu]) }}" class="btn btn-warning me-2">
                     <i class="bi bi-pencil"></i> Editar
                 </a>
                 <a href="{{ route('autores.index') }}" class="btn btn-secondary">

@@ -1,0 +1,15 @@
+#!/bin/sh
+# Executa testes do Laravel com Xdebug desativado.
+# Uso: ./ptest [args do php artisan test]
+
+set -e
+
+if [ -f "docker-compose.yml" ]; then
+  # Ambiente Docker
+  docker compose exec app env XDEBUG_MODE=off php artisan test --testdox "$@"
+else
+  # Ambiente local
+  XDEBUG_MODE=off php artisan test --testdox "$@"
+fi
+
+
