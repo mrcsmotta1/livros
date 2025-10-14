@@ -25,7 +25,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('assuntos', AssuntoController::class)->whereNumber('assunto');
-    Route::resource('autores', AutorController::class)->whereNumber('autore');
+    Route::resource('autores', AutorController::class)
+        ->parameters(['autores' => 'autor'])
+        ->whereNumber('autor');
     Route::resource('livros', LivrosController::class)->whereNumber('livro');
 
     Route::prefix('relatorios/autores')->group(function () {

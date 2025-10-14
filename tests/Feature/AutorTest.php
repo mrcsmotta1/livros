@@ -86,7 +86,7 @@ class AutorTest extends TestCase
         $response = $this->get(route('autores.show', $autor->codAu));
         $response->assertStatus(200);
         $response->assertViewIs('autores.show');
-        $response->assertViewHas('autore', function ($viewAutor) use ($autor) {
+        $response->assertViewHas('autor', function ($viewAutor) use ($autor) {
             return $viewAutor->codAu === $autor->codAu;
         });
     }
@@ -99,7 +99,7 @@ class AutorTest extends TestCase
         $response = $this->get(route('autores.edit', $autor->codAu));
         $response->assertStatus(200);
         $response->assertViewIs('autores.edit');
-        $response->assertViewHas('autore', function ($viewAutor) use ($autor) {
+        $response->assertViewHas('autor', function ($viewAutor) use ($autor) {
             return $viewAutor->codAu === $autor->codAu;
         });
     }

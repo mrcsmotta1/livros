@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AutorStoreRequest;
 use App\Models\Autor;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Interfaces\Services\AutorServiceInterface;
 use Exception;
 use Illuminate\Http\Request;
@@ -50,25 +49,25 @@ class AutorController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Autor $autore): RedirectResponse|View
+    public function show(Autor $autor): RedirectResponse|View
     {
-        return view('autores.show', compact('autore'));
+        return view('autores.show', compact('autor'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Autor $autore)
+    public function edit(Autor $autor)
     {
-        return view('autores.edit', compact('autore'));
+        return view('autores.edit', compact('autor'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(AutorStoreRequest $request, int $codAu)
+    public function update(AutorStoreRequest $request, Autor $autor)
     {
-        $this->service->atualizarAutor($codAu, $request->validated());
+        $this->service->atualizarAutor($autor->codAu, $request->validated());
 
         return redirect()->route('autores.index')
             ->with('success', 'Autor atualizado com sucesso!');
@@ -77,9 +76,9 @@ class AutorController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(int $codAu)
+    public function destroy(Autor $autor)
     {
-        $this->service->deletarAutor($codAu);
+        $this->service->deletarAutor($autor->codAu);
 
         return redirect()
             ->route('autores.index')

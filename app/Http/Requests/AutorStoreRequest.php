@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use App\Models\Autor;
 
 class AutorStoreRequest extends FormRequest
 {
@@ -30,13 +32,8 @@ class AutorStoreRequest extends FormRequest
      */
     public function rules(): array
     {
-        $autorId = $this->route('autore');
-
-        $uniqueRule = 'unique:autor,nome';
-
-        if ($autorId) {
-            $uniqueRule .= ',' . $autorId . ',codAu';
-        }
+        $autorParam = $this->route('autor');
+        $autorId = $autorParam instanceof Autor ? $autorParam->codAu : $autorParam;
 
         return [
             'nome' => [
@@ -56,7 +53,8 @@ class AutorStoreRequest extends FormRequest
                         $fail('O campo nome deve conter letras ou números válidos.');
                     }
                 },
-                $uniqueRule,
+                Rule::unique('autor', 'nome')
+                    ->when($autorId, fn ($rule) => $rule->ignore($autorId, 'codAu')),
             ],
         ];
     }
