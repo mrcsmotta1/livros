@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use App\Models\Assunto;
 
 class AssuntoStoreRequest extends FormRequest
 {
@@ -21,13 +23,8 @@ class AssuntoStoreRequest extends FormRequest
      */
     public function rules(): array
     {
-        $assuntoId = $this->route('assunto');
-
-        $uniqueRule = 'unique:assunto,descricao';
-
-        if ($assuntoId) {
-            $uniqueRule .= ',' . $assuntoId . ',codAs';
-        }
+        $assuntoParam = $this->route('assunto');
+        $assuntoId    = $assuntoParam instanceof Assunto ? $assuntoParam->codAs : $assuntoParam;
 
         return [
             'descricao' => [
@@ -41,7 +38,9 @@ class AssuntoStoreRequest extends FormRequest
                         $fail('O nome não pode conter apenas espaços em branco.');
                     }
                 },
-                $uniqueRule,
+                Rule::unique('assunto', 'descricao')->when($assuntoId, function ($rule) use ($assuntoId) {
+                    return $rule->ignore($assuntoId, 'codAs');
+                }),
             ],
         ];
     }
