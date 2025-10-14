@@ -6,6 +6,7 @@ use App\Models\RelatorioAutor;
 use App\Interfaces\Repositories\RelatorioAutorRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class EloquentRelatorioAutorRepository implements RelatorioAutorRepositoryInterface
 {
@@ -23,7 +24,11 @@ class EloquentRelatorioAutorRepository implements RelatorioAutorRepositoryInterf
         }
 
         if (!empty($filtros['editora'])) {
-            $query->where('editora', 'ILIKE', '%' . $filtros['editora'] . '%');
+            if (DB::getDriverName() === 'sqlite') {
+                $query->whereRaw('LOWER(editora) LIKE LOWER(?)', ['%' . $filtros['editora'] . '%']);
+            } else {
+                $query->where('editora', 'ILIKE', '%' . $filtros['editora'] . '%');
+            }
         }
 
         if (!empty($filtros['titulo_livro'])) {
@@ -69,7 +74,11 @@ class EloquentRelatorioAutorRepository implements RelatorioAutorRepositoryInterf
         }
 
         if (!empty($filtros['editora'])) {
-            $query->where('editora', 'ILIKE', '%' . $filtros['editora'] . '%');
+            if (DB::getDriverName() === 'sqlite') {
+                $query->whereRaw('LOWER(editora) LIKE LOWER(?)', ['%' . $filtros['editora'] . '%']);
+            } else {
+                $query->where('editora', 'ILIKE', '%' . $filtros['editora'] . '%');
+            }
         }
 
         if (!empty($filtros['titulo_livro'])) {

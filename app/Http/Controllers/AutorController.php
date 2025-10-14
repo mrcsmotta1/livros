@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Interfaces\Services\AutorServiceInterface;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class AutorController extends Controller
 {
@@ -47,46 +50,17 @@ class AutorController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $codAu)
+    public function show(Autor $autore): RedirectResponse|View
     {
-        try {
-            $autor = $this->service->buscarPorId($codAu);
-
-            if (!$autor) {
-                return redirect()
-                    ->route('autores.index')
-                    ->with('error', 'Autor não encontrado.');
-            }
-
-
-            return view('autores.show', compact('autor'));
-        } catch (ModelNotFoundException $e) {
-            return redirect()
-                ->route('autores.index')
-                ->with('error', 'Autor não encontrado.');
-        }
+        return view('autores.show', compact('autore'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(int $codAu)
+    public function edit(Autor $autore)
     {
-        try {
-            $autor = $this->service->buscarPorId($codAu);
-
-            if (!$autor) {
-                return redirect()
-                    ->route('autores.index')
-                    ->with('error', 'Autor não encontrado.');
-            }
-
-            return view('autores.edit', compact('autor'));
-        } catch (ModelNotFoundException $e) {
-            return redirect()
-                ->route('autores.index')
-                ->with('error', 'Autor não encontrado.');
-        }
+        return view('autores.edit', compact('autore'));
     }
 
     /**
@@ -94,19 +68,10 @@ class AutorController extends Controller
      */
     public function update(AutorStoreRequest $request, int $codAu)
     {
-        try {
-            $this->service->atualizarAutor($codAu, $request->validated());
-            return redirect()->route('autores.index')
-                ->with('success', 'Autor atualizado com sucesso!');
-        } catch (ModelNotFoundException $e) {
-            return redirect()
-                ->route('autores.index')
-                ->with('error', 'Autor não encontrado.');
-        } catch (Exception $e) {
-            return redirect()
-                ->route('autores.index')
-                ->with('error', 'Erro ao atualizar autor: ' . $e->getMessage());
-        }
+        $this->service->atualizarAutor($codAu, $request->validated());
+
+        return redirect()->route('autores.index')
+            ->with('success', 'Autor atualizado com sucesso!');
     }
 
     /**
@@ -114,20 +79,11 @@ class AutorController extends Controller
      */
     public function destroy(int $codAu)
     {
-        try {
-            $this->service->deletarAutor($codAu);
-            return redirect()
-                ->route('autores.index')
-                ->with('success', 'Autor excluído com sucesso!');
-        } catch (ModelNotFoundException $e) {
-            return redirect()
-                ->route('autores.index')
-                ->with('error', 'Autor não encontrado.');
-        } catch (Exception $e) {
-            return redirect()
-                ->route('autores.index')
-                ->with('error', 'Erro ao excluir autor: ' . $e->getMessage());
-        }
+        $this->service->deletarAutor($codAu);
+
+        return redirect()
+            ->route('autores.index')
+            ->with('success', 'Autor excluído com sucesso!');
     }
 
     public function search(Request $request)
@@ -154,7 +110,11 @@ class AutorController extends Controller
 
         $term = $request->get('q', '');
         if ($term) {
-            $query->whereRaw('"nome" ILIKE ?', ["%{$term}%"]);
+            if (DB::getDriverName() === 'sqlite') {
+                $query->whereRaw('LOWER("nome") LIKE LOWER(?)', ["%{$term}%"]);
+            } else {
+                $query->whereRaw('"nome" ILIKE ?', ["%{$term}%"]);
+            }
         }
 
         $result = $query->selectRaw('"codAu" as id, "nome"')

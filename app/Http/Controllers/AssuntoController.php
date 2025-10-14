@@ -10,6 +10,7 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use App\Models\Assunto;
+use Illuminate\Support\Facades\DB;
 
 class AssuntoController extends Controller
 {
@@ -52,45 +53,17 @@ class AssuntoController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(int $codAs): RedirectResponse|View
+    public function show(Assunto $assunto): RedirectResponse|View
     {
-        try {
-            $assunto = $this->service->buscarPorId($codAs);
-
-            if (!$assunto) {
-                return redirect()
-                    ->route('assuntos.index')
-                    ->with('error', 'Assunto não encontrado.');
-            }
-
-            return view('assuntos.show', compact('assunto'));
-        } catch (ModelNotFoundException $e) {
-            return redirect()
-                ->route('assuntos.index')
-                ->with('error', 'Assunto não encontrado.');
-        }
+        return view('assuntos.show', compact('assunto'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(int $codAs): RedirectResponse|View
+    public function edit(Assunto $assunto): RedirectResponse|View
     {
-        try {
-            $assunto = $this->service->buscarPorId($codAs);
-
-            if (!$assunto) {
-                return redirect()
-                    ->route('assuntos.index')
-                    ->with('error', 'Assunto não encontrado.');
-            }
-
-            return view('assuntos.edit', compact('assunto'));
-        } catch (ModelNotFoundException $e) {
-            return redirect()
-                ->route('assuntos.index')
-                ->with('error', 'Assunto não encontrado.');
-        }
+        return view('assuntos.edit', compact('assunto'));
     }
 
     /**
@@ -98,20 +71,11 @@ class AssuntoController extends Controller
      */
     public function update(AssuntoStoreRequest $request, int $codAs)
     {
-        try {
-            $this->service->atualizarAssunto($codAs, $request->validated());
-            return redirect()
-                ->route('assuntos.index')
-                ->with('success', 'Assunto atualizado com sucesso!');
-        } catch (ModelNotFoundException $e) {
-            return redirect()
-                ->route('assuntos.index')
-                ->with('error', 'Assunto não encontrado.');
-        } catch (Exception $e) {
-            return redirect()
-                ->route('assuntos.index')
-                ->with('error', 'Erro ao atualizar assunto: ' . $e->getMessage());
-        }
+        $this->service->atualizarAssunto($codAs, $request->validated());
+
+        return redirect()
+            ->route('assuntos.index')
+            ->with('success', 'Assunto atualizado com sucesso!');
     }
 
     /**
@@ -119,20 +83,10 @@ class AssuntoController extends Controller
      */
     public function destroy(int $codAs)
     {
-        try {
-            $this->service->deletarAssunto($codAs);
-            return redirect()
-                ->route('assuntos.index')
-                ->with('success', 'Assunto excluído com sucesso!');
-        } catch (ModelNotFoundException $e) {
-            return redirect()
-                ->route('assuntos.index')
-                ->with('error', 'Assunto não encontrado.');
-        } catch (Exception $e) {
-            return redirect()
-                ->route('assuntos.index')
-                ->with('error', 'Erro ao excluir assunto: ' . $e->getMessage());
-        }
+        $this->service->deletarAssunto($codAs);
+        return redirect()
+            ->route('assuntos.index')
+            ->with('success', 'Assunto excluído com sucesso!');
     }
 
     public function search(Request $request)
@@ -158,7 +112,11 @@ class AssuntoController extends Controller
 
         $term = $request->get('q', '');
         if ($term) {
-            $query->whereRaw('"descricao" ILIKE ?', ["%{$term}%"]);
+            if (DB::getDriverName() === 'sqlite') {
+                $query->whereRaw('LOWER("descricao") LIKE LOWER(?)', ["%{$term}%"]);
+            } else {
+                $query->whereRaw('"descricao" ILIKE ?', ["%{$term}%"]);
+            }
         }
 
         $assuntos = $query->selectRaw('"codAs" as id, "descricao"')

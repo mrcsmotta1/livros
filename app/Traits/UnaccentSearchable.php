@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 trait UnaccentSearchable
 {
@@ -15,6 +16,11 @@ trait UnaccentSearchable
     {
         // Evita injeção de SQL em nome de coluna
         $column = str_replace(['"', "'"], '', $column);
+
+        if (DB::getDriverName() === 'sqlite') {
+            // Fallback para SQLite (sem unaccent/ILIKE)
+            return $query->whereRaw("LOWER({$column}) LIKE LOWER(?)", ['%' . $value . '%']);
+        }
 
         return $query->whereRaw("unaccent({$column}) ILIKE unaccent(?)", ['%' . $value . '%']);
     }
