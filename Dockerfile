@@ -30,6 +30,11 @@ RUN apt-get update \
 
 COPY 90-xdebug.ini "${PHP_INI_DIR}/conf.d"
 
+COPY docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["php-fpm"]
+
 # Instale extensões PHP
 RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
     && docker-php-ext-install pgsql pdo_pgsql imap zip gd soap bcmath \
