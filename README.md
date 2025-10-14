@@ -49,6 +49,10 @@ docker compose exec app chown -R www-data:www-data /app/storage
 ```bash
 docker compose exec app php artisan storage:link
 ```
+5. **Execute as migrations:**
+```bash
+docker compose exec app php artisan migrate
+```
 
 ---
 
