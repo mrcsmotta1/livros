@@ -54,6 +54,11 @@ docker compose exec app php artisan storage:link
 docker compose exec app php artisan migrate
 ```
 
+6. **Compile os assets:**
+```bash
+docker compose exec app npm install && npm run mix
+```
+
 ---
 
 ## 🧪 Execução de Testes
