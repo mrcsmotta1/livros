@@ -41,6 +41,7 @@ class RelatorioAutorService implements RelatorioAutorServiceInterface
         return function () use ($dados, $header) {
             $file = fopen('php://output', 'w');
             fwrite($file, chr(239) . chr(187) . chr(191));
+            fwrite($file, "sep=;\n");
             fputcsv($file, $header, ';');
 
             foreach ($dados as $linha) {
@@ -52,7 +53,7 @@ class RelatorioAutorService implements RelatorioAutorServiceInterface
                     $linha->edicao,
                     number_format($linha->valor, 2, ',', '.'),
                     $linha->assuntos_relacionados
-                ], ';');
+                ], ';', '"');
             }
             fclose($file);
         };
