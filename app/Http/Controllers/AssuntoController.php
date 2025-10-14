@@ -7,7 +7,6 @@ use App\Interfaces\Services\AssuntoServiceInterface;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Exception;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use App\Models\Assunto;
 use Illuminate\Support\Facades\DB;
@@ -69,9 +68,9 @@ class AssuntoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(AssuntoStoreRequest $request, int $codAs)
+    public function update(AssuntoStoreRequest $request, Assunto $assunto)
     {
-        $this->service->atualizarAssunto($codAs, $request->validated());
+        $this->service->atualizarAssunto($assunto->codAs, $request->validated());
 
         return redirect()
             ->route('assuntos.index')
@@ -81,9 +80,9 @@ class AssuntoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(int $codAs)
+    public function destroy(Assunto $assunto)
     {
-        $this->service->deletarAssunto($codAs);
+        $this->service->deletarAssunto($assunto->codAs);
         return redirect()
             ->route('assuntos.index')
             ->with('success', 'Assunto excluído com sucesso!');

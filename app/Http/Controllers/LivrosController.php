@@ -36,14 +36,17 @@ class LivrosController extends Controller
     public function store(LivroStoreRequest $request)
     {
         try {
-            $livro = $this->service->criarLivros($request->validated());
+            $data = $request->validated();
+            $livro = $this->service->criarLivros($data);
 
-            if ($request->autores) {
-                $livro->autores()->sync($request->autores);
+            $autores = (array) ($data['autores'] ?? []);
+            if (!empty($autores)) {
+                $livro->autores()->sync($autores);
             }
 
-            if ($request->assuntos) {
-                $livro->assuntos()->sync($request->assuntos);
+            $assuntos = (array) ($data['assuntos'] ?? []);
+            if (!empty($assuntos)) {
+                $livro->assuntos()->sync($assuntos);
             }
 
             return redirect()->route('livros.index')->with('success', 'Livro criado com sucesso!');
@@ -71,9 +74,9 @@ class LivrosController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(LivroStoreRequest $request, string $id)
+    public function update(LivroStoreRequest $request, Livro $livro)
     {
-        $livro = $this->service->atualizarLivro($id, $request->validated());
+        $livro = $this->service->atualizarLivro($livro->codl, $request->validated());
 
         return redirect()
             ->route('livros.show', $livro->codl)
@@ -83,9 +86,9 @@ class LivrosController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Livro $livro)
     {
-        $this->service->deletarLivro($id);
+        $this->service->deletarLivro($livro->codl);
         return redirect()
             ->route('livros.index')
             ->with('success', 'Livro excluído com sucesso!');
