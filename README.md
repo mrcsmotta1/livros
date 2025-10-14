@@ -23,11 +23,11 @@ O objetivo é demonstrar um ambiente Laravel moderno, totalmente containerizado,
 | Tecnologia | Versão | Função |
 |-------------|---------|---------|
 | **PHP** | 8.2+ | Linguagem principal |
-| **Laravel** | 11.x | Framework backend |
+| **Laravel** | 12.x | Framework backend |
 | **PostgreSQL** | 15+ | Banco de dados relacional |
 | **Docker / Docker Compose** | latest | Orquestração de containers |
 | **Xdebug** | 3.x | Geração de cobertura de testes |
-| **PHPUnit** | 10.x | Framework de testes |
+| **PHPUnit** | 11.x | Framework de testes |
 | **Composer** | 2.x | Gerenciador de dependências |
 
 ---
