@@ -49,7 +49,28 @@ class LivroStoreRequest extends FormRequest
                     }
                 },
             ],
-            'editora'         => ['required', 'string', 'min:2', 'max:40'],
+            'editora'         => [
+                'required',
+                'string',
+                'min:2',
+                'max:40',
+                'regex:/^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s\'\-\.\,]+$/u',
+                function ($attribute, $value, $fail) {
+                    // Remove espaços para evitar só-branco
+                    $trimmed = trim($value);
+
+                    // Falha se vazio depois de trim (só espaços)
+                    if ($trimmed === '') {
+                        $fail('O campo nome não pode conter apenas espaços em branco.');
+                        return;
+                    }
+
+                    // Falha se não houver ao menos uma letra ou número (ex: "~~~~", "!!!")
+                    if (!preg_match('/[A-Za-zÀ-ÖØ-öø-ÿ0-9]/u', $trimmed)) {
+                        $fail('O campo editora deve conter letras ou números válidos.');
+                    }
+                },
+            ],
             'edicao'          => ['required', 'integer', 'min:1', 'max:2147483647'],
             'ano_publicacao'  => ['required', 'integer', 'min:1500', "max:{$anoAtual}"],
             'valor'           => ['required', 'numeric', 'gt:0', 'lt:100000000'],

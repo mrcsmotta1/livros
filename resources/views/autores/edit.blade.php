@@ -6,7 +6,7 @@
     </x-slot>
     <div class="container mt-4">
         <div class="mb-3 d-flex justify-content-between align-items-center">
-            <h1>Autor: {{ $autore->nome }}</h1>
+            <h1>Autor: {{ $autor->nome }}</h1>
             <a href="{{ route('autores.index') }}" class="btn btn-secondary">
                 <i class="bi bi-arrow-left"></i> Voltar
             </a>
@@ -14,7 +14,7 @@
 
         <x-validation-messages />
 
-        <form action="{{ route('autores.update', $autore->codAu) }}" method="POST">
+        <form action="{{ route('autores.update', $autor->codAu) }}" method="POST">
             @csrf
             @method('PUT')
 
@@ -28,7 +28,7 @@
                             <label for="descricao" class="form-label"><strong>Nome</strong></label>
                             <input type="text" name="nome" id="nome"
                                 class="form-control @error('nome') is-invalid @enderror"
-                                value="{{ old('nome', $autore->nome) }}">
+                                value="{{ old('nome', $autor->nome) }}">
                         </li>
                     </ul>
                 </div>

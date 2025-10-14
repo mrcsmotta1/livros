@@ -18,17 +18,17 @@
                     class="form-control">
             </div>
 
-            <!-- Editora -->
-            <div class="col-md-3">
-                <label class="form-label">Editora</label>
-                <input type="text" name="editora" value="{{ old('autor', $filtros['editora'] ?? '') }}"
-                    class="form-control">
-            </div>
-
             <!-- Livro -->
             <div class="col-md-3">
                 <label class="form-label">Título do Livro</label>
                 <input type="text" name="titulo_livro" value="{{ old('autor', $filtros['titulo_livro'] ?? '') }}"
+                    class="form-control">
+            </div>
+
+            <!-- Editora -->
+            <div class="col-md-3">
+                <label class="form-label">Editora</label>
+                <input type="text" name="editora" value="{{ old('autor', $filtros['editora'] ?? '') }}"
                     class="form-control">
             </div>
 
