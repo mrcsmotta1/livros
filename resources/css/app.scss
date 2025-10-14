@@ -1,5 +1,6 @@
+$bootstrap-icons-font-path: "~bootstrap-icons/font/fonts";
 @import "~bootstrap/scss/bootstrap";
-@import "bootstrap-icons/font/bootstrap-icons.css";
+@import "bootstrap-icons/font/bootstrap-icons";
 
 /* Corrige o alinhamento vertical do botão remover com o select */
 .input-group .btn.remove-autor,
