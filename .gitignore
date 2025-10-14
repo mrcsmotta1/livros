@@ -36,3 +36,8 @@ Thumbs.db
 !/storage/framework/.gitignore
 !/storage/logs
 !/storage/logs/.gitignore
+/public/css/*
+!/public/css/.gitignore
+/public/js/*
+!/public/js/.gitignore
+/public/mix-manifest.json
