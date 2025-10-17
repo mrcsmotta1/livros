@@ -140,4 +140,13 @@
                 </div>
         </form>
     </div>
+
+    <x-slot name="scripts">
+        <script>
+            window.livroOld = {
+                autores: @json(old('autores', [])),
+                assuntos: @json(old('assuntos', []))
+            };
+        </script>
+    </x-slot>
 </x-app-layout>
