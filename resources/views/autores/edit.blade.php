@@ -28,7 +28,7 @@
                             <label for="descricao" class="form-label"><strong>Nome</strong></label>
                             <input type="text" name="nome" id="nome"
                                 class="form-control @error('nome') is-invalid @enderror"
-                                value="{{ old('nome', $autor->nome) }}">
+                                value="{{ old('nome', $autor->nome) }}" autofocus>
                         </li>
                     </ul>
                 </div>

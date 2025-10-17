@@ -26,7 +26,7 @@
                         <li class="list-group-item">
                             <label for="nome" class="form-label"><strong>Nome</strong></label>
                             <input type="text" name="nome" id="nome"
-                                class="form-control @error('nome') is-invalid @enderror" value="{{ old('nome') }}">
+                                class="form-control @error('nome') is-invalid @enderror" value="{{ old('nome') }}" autofocus>
                             @error('nome')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

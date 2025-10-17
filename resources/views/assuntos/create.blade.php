@@ -27,7 +27,7 @@
                             <label for="descricao" class="form-label"><strong>Descrição</strong></label>
                             <input type="text" name="descricao" id="descricao"
                                 class="form-control @error('descricao') is-invalid @enderror"
-                                value="{{ old('descricao') }}">
+                                value="{{ old('descricao') }}" autofocus>
                             @error('descricao')
                             <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

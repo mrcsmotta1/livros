@@ -29,7 +29,7 @@
                             <label for="descricao" class="form-label"><strong>Descrição:</strong></label>
                             <input type="text" name="descricao" id="descricao"
                                 class="form-control @error('descricao') is-invalid @enderror"
-                                value="{{ old('descricao', $assunto->descricao) }}">
+                                value="{{ old('descricao', $assunto->descricao) }}" autofocus>
                         </li>
                     </ul>
                 </div>
