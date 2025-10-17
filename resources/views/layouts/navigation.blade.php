@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-    <div class="container" style="max-width: 1370px;"> <!-- centraliza e limita largura -->
+    <div class="container px-0" style="max-width: 1350px;"> <!-- centraliza e limita largura -->
 
         <!-- Logo -->
         <a class="navbar-brand" href="{{ route('index') }}">
