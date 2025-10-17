@@ -31,7 +31,7 @@
                                 <div class="col-md-6">
                                     <label for="titulo" class="form-label">Título</label>
                                     <input type="text" name="titulo" id="titulo" class="form-control"
-                                        value="{{ old('titulo', $livro->titulo) }}">
+                                        value="{{ old('titulo', $livro->titulo) }}" autofocus>
                                 </div>
 
                                 <div class="col-md-6">
