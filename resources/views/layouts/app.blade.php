@@ -14,27 +14,30 @@
 
 </head>
 <body class="bg-light text-dark d-flex flex-column min-vh-100">
-
     <!-- Navbar -->
     @include('layouts.navigation')
 
     <!-- Page Header -->
     @isset($header)
-        <header class="mb-4 text-white bg-secondary">
-            <div class="container py-4">
-                {{ $header }}
+        <header class="mb-4">
+            <div class="container px-0 py-4 text-white rounded bg-secondary" style="max-width: 1350px;">
+                <div class="px-3">
+                    {{ $header }}
+                </div>
             </div>
         </header>
     @endisset
 
     <!-- Page Content -->
-    <main class="container py-4 flex-grow-1">
-       {{ $slot }}
+    <main class="container px-0 py-4 flex-grow-1" style="max-width: 1350px;">
+       <div class="px-0">
+           {{ $slot }}
+       </div>
     </main>
 
     <!-- Bootstrap JS via Mix -->
     <script src="{{ mix('js/app.js') }}"></script>
     <script src="{{ asset('js/custom-alerts.js') }}"></script>
-
+    {!! $scripts ?? '' !!}
 </body>
 </html>
