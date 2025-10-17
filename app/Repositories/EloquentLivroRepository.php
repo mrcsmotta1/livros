@@ -18,7 +18,7 @@ class EloquentLivroRepository implements LivroRepositoryInterface
      */
     public function getAllLivros(int $perPage = 10): LengthAwarePaginator
     {
-        return Livro::orderBy('created_at', 'desc')->paginate($perPage);
+    return Livro::with(['autores', 'assuntos'])->orderBy('created_at', 'desc')->paginate($perPage);
     }
 
     /**
@@ -41,7 +41,10 @@ class EloquentLivroRepository implements LivroRepositoryInterface
      */
     public function attachAutores(Livro $livro, array $autores): void
     {
-        $livro->autores()->sync($autores);
+        $livro->autores()->detach();
+        foreach ($autores as $key => $id) {
+            $livro->autores()->attach($id);
+        }
     }
 
     /**
@@ -52,7 +55,18 @@ class EloquentLivroRepository implements LivroRepositoryInterface
      */
     public function attachAssuntos(Livro $livro, array $assuntos): void
     {
-        $livro->assuntos()->sync($assuntos);
+        $livro->assuntos()->detach();
+        foreach ($assuntos as $key => $id) {
+            $livro->assuntos()->attach($id);
+        }
+    }
+
+    /**
+     * Sincroniza Editora única
+     */
+    public function attachEditora(Livro $livro, int $editoraId): void
+    {
+    // Removido: relacionamento editoras
     }
 
     /**
@@ -66,6 +80,14 @@ class EloquentLivroRepository implements LivroRepositoryInterface
     public function updateLivro(int $codAu, array $data): Livro
     {
         $autor = Livro::findOrFail($codAu);
+        // Evita atualizar 'editora' string diretamente
+        unset($data['editora']);
+
+        // Trata a codificação dos caracteres especiais
+        if (isset($data['edicao'])) {
+            $data['edicao'] = mb_convert_encoding($data['edicao'], 'UTF-8', 'UTF-8');
+        }
+
         $autor->update($data);
         return $autor;
     }
@@ -78,7 +100,7 @@ class EloquentLivroRepository implements LivroRepositoryInterface
      */
     public function buscarPorId(int $codl): Livro|null
     {
-        return Livro::find($codl);
+    return Livro::with(['autores', 'assuntos'])->find($codl);
     }
 
     /**
