@@ -4,12 +4,8 @@ namespace App\Services;
 
 use App\Interfaces\Repositories\RelatorioAutorRepositoryInterface;
 use App\Interfaces\Services\RelatorioAutorServiceInterface;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
-use League\Csv\Writer;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Response;
 use Closure;
 
 class RelatorioAutorService implements RelatorioAutorServiceInterface
@@ -40,8 +36,7 @@ class RelatorioAutorService implements RelatorioAutorServiceInterface
 
         return function () use ($dados, $header) {
             $file = fopen('php://output', 'w');
-            fwrite($file, chr(239) . chr(187) . chr(191));
-            fwrite($file, "sep=;\n");
+            fwrite($file, "\xEF\xBB\xBF");
             fputcsv($file, $header, ';');
 
             foreach ($dados as $linha) {
