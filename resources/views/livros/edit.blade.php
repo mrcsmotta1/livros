@@ -134,3 +134,10 @@
         </form>
     </div>
 </x-app-layout>
+
+<script>
+    window.livroOld = {
+        autores: @json(old('autores', [])),
+        assuntos: @json(old('assuntos', []))
+    };
+</script>

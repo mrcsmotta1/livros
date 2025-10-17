@@ -103,6 +103,69 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     }
 
+    // retornar os autores e assuntos ja iseridos em create e edit livro após um retorno do validate
+    const autoresAntigos = window.livroOld?.autores || [];
+    const assuntosAntigos = window.livroOld?.assuntos || [];
+
+    //Pega IDs já existentes no HTML (ex: vindos do edit)
+    const autoresExistentes = $(".autor-select")
+        .map(function () {
+            return $(this).data("selected") || $(this).val();
+        })
+        .get();
+
+    const assuntosExistentes = $(".assunto-select")
+        .map(function () {
+            return $(this).data("selected") || $(this).val();
+        })
+        .get();
+
+    // Filtra apenas os que ainda não existem
+    const novosAutores = autoresAntigos.filter(
+        (id) => !autoresExistentes.includes(String(id))
+    );
+    const novosAssuntos = assuntosAntigos.filter(
+        (id) => !assuntosExistentes.includes(String(id))
+    );
+
+    // === AUTORES ===
+    novosAutores.forEach((id, index) => {
+        let $campo;
+
+        if (index === 0 && $(".autor-field").length === 0) {
+            $campo = $(".autor-field").first();
+        } else {
+            $campo = $(".autor-field").first().clone();
+            $("#autores-container").append($campo);
+        }
+
+        const $select = $campo.find(".autor-select");
+        $select.attr("data-selected", id);
+        $select.val("");
+        $select.trigger("change");
+
+        $campo.find(".remove-autor").show();
+    });
+
+    // === ASSUNTOS ===
+    novosAssuntos.forEach((id, index) => {
+        let $campo;
+
+        if (index === 0 && $(".assunto-field").length === 0) {
+            $campo = $(".assunto-field").first();
+        } else {
+            $campo = $(".assunto-field").first().clone();
+            $("#assuntos-container").append($campo);
+        }
+
+        const $select = $campo.find(".assunto-select");
+        $select.attr("data-selected", id);
+        $select.val("");
+        $select.trigger("change");
+
+        $campo.find(".remove-assunto").show();
+    });
+
     // AUTOR Edit
     $(".autor-select").each(function () {
         const selectedId = $(this).data("selected");
@@ -269,11 +332,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const formRelatoriosAutores = document.getElementById("relatorios-autores");
     const exportButton = document.getElementById("btnExportarCsv");
 
-    if (
-        !formRelatoriosAutores ||
-        !exportButton ||
-        !window.ROUTES?.exportCsv
-    )
+    if (!formRelatoriosAutores || !exportButton || !window.ROUTES?.exportCsv)
         return;
 
     exportButton.addEventListener("click", () => {
