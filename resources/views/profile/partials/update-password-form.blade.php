@@ -3,6 +3,13 @@
         <div class="card-body">
             <h5 class="mb-3 card-title">Atualizar Senha</h5>
 
+            @if (session('status') === 'password-updated')
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle me-2"></i>Senha atualizada com sucesso!
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
             <form method="POST" action="{{ route('password.update') }}">
                 @csrf
                 @method('PUT')
@@ -40,13 +47,7 @@
                     @enderror
                 </div>
 
-                <div class="d-flex align-items-center gap-3">
-                    <button type="submit" class="btn btn-primary">Atualizar Senha</button>
-
-                    @if (session('status') === 'password-updated')
-                    <p class="text-success mb-0">Senha atualizada com sucesso!</p>
-                    @endif
-                </div>
+                <button type="submit" class="btn btn-primary">Atualizar Senha</button>
             </form>
         </div>
     </div>

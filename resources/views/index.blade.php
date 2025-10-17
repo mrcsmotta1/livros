@@ -3,7 +3,7 @@
         <h2 class="h4 fw-semibold text-dark">Dashboard</h2>
     </x-slot>
 
-    <div class="container mt-4">
+    <div class="mt-4">
         {{-- Contadores gerais --}}
         <div class="mb-4 text-center row">
             <div class="mb-3 col-md-4">
@@ -56,9 +56,11 @@
                         Últimos {{ $ultimosLivros->count() }} livros cadastrados
                     @endif
                 </h5>
-                <a href="{{ route('livros.index') }}" class="btn btn-sm btn-outline-primary">
-                    <i class="bi bi-list"></i> Ver todos
-                </a>
+                @if($livrosCount > 0)
+                    <a href="{{ route('livros.index') }}" class="btn btn-sm btn-outline-primary">
+                        <i class="bi bi-list"></i> Ver todos
+                    </a>
+                @endif
             </div>
 
             <div class="p-0 card-body">

@@ -27,7 +27,7 @@ class RelatorioAutorController extends Controller
         $filtros = $request->only(keys: ['autor', 'editora', 'titulo_livro', 'operador_edicao', 'edicao', 'operador_ano', 'ano_publicacao', 'operador_valor', 'valor', 'data_inicio', 'data_fim']);
         $callback =  $this->service->exportarCsv($filtros);
 
-        $nomeArquivo = 'relatorio_autores_.csv';
+        $nomeArquivo = 'relatorio_autores_' . date('Y_m_d_H_i_s') . '.csv';
 
         return Response::streamDownload($callback, $nomeArquivo, [
             'Content-Type' => 'application/octet-stream',
