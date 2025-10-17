@@ -38,7 +38,7 @@
                     <button type="submit" class="btn btn-success me-2">
                         <i class="bi bi-check-circle"></i> Salvar Alterações
                     </button>
-                    <a href="{{ route('assuntos.show', ['assunto' => $assunto->codAs]) }}" class="btn btn-secondary">
+                    <a href="{{ route('assuntos.index') }}" class="btn btn-secondary">
                         <i class="bi bi-x-circle"></i> Cancelar
                     </a>
                 </div>
