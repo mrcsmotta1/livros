@@ -20,21 +20,23 @@
             <div class="card-body">
                 <ul class="list-group">
                     <li class="list-group-item">
-                        <label for="descricao" class="form-label">Descrição</label>
-                        <input type="text" name="descricao" id="descricao"
-                            class="form-control @error('nome') is-invalid @enderror"
-                            value="{{ old('descricao', $assunto->descricao) }}" required>
+                        <div class="mb-2 row">
+                            <div class="col-md-6">
+                                <p class="mb-1"><strong>Descrição:</strong> {{ $assunto->descricao ?? '—' }}</p>
+                            </div>
+
+                            <div class="mt-4">
+                                <a href="{{ route('assuntos.edit', ['assunto' => $assunto->codAs]) }}"
+                                    class="btn btn-warning me-2">
+                                    <i class="bi bi-pencil"></i> Editar
+                                </a>
+                                <a href="{{ route('assuntos.index') }}" class="btn btn-secondary">
+                                    <i class="bi bi-arrow-left"></i> Voltar
+                                </a>
+                            </div>
+                        </div>
                     </li>
                 </ul>
-            </div>
-
-            <div class="mt-4">
-                <a href="{{ route('assuntos.edit', ['assunto' => $assunto->codAs]) }}" class="btn btn-warning me-2">
-                    <i class="bi bi-pencil"></i> Editar
-                </a>
-                <a href="{{ route('assuntos.index') }}" class="btn btn-secondary">
-                    <i class="bi bi-arrow-left"></i> Voltar
-                </a>
             </div>
         </div>
     </div>

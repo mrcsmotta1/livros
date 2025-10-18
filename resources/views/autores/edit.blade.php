@@ -4,6 +4,7 @@
             {{ __('Editar Autor') }}
         </h2>
     </x-slot>
+
     <div class="container mt-4">
         <div class="mb-3 d-flex justify-content-between align-items-center">
             <h1>Autor: {{ $autor->nome }}</h1>
@@ -14,7 +15,7 @@
 
         <x-validation-messages />
 
-        <form action="{{ route('autores.update', $autor->codAu) }}" method="POST">
+        <form action="{{ route('autores.update', ['autor' => $autor->codAu]) }}" method="POST">
             @csrf
             @method('PUT')
 
@@ -25,7 +26,7 @@
                 <div class="card-body">
                     <ul class="list-group">
                         <li class="list-group-item">
-                            <label for="descricao" class="form-label"><strong>Nome</strong></label>
+                            <label for="nome" class="form-label"><strong>Nome</strong></label>
                             <input type="text" name="nome" id="nome"
                                 class="form-control @error('nome') is-invalid @enderror"
                                 value="{{ old('nome', $autor->nome) }}" autofocus>

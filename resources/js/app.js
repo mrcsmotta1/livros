@@ -523,3 +523,16 @@ document.addEventListener("DOMContentLoaded", function () {
         window.open(`${window.ROUTES.exportCsv}?${params}`, "_blank");
     });
 });
+
+window.addEventListener("load", () => {
+    setTimeout(() => {
+        const campo = document.querySelector(
+            "input[autofocus], textarea[autofocus]"
+        );
+        if (campo && campo.value) {
+            const len = campo.value.length;
+            campo.focus();
+            campo.setSelectionRange(len, len);
+        }
+    }, 50);
+});

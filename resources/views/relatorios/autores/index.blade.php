@@ -15,7 +15,7 @@
             <div class="col-md-3">
                 <label class="form-label">Autor</label>
                 <input type="text" name="autor" value="{{ old('autor', $filtros['autor'] ?? '') }}"
-                    class="form-control">
+                    class="form-control" autofocus>
             </div>
 
             <!-- Livro -->
