@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>{{ config('app.name', 'Laravel') }}</title>
-
+        <link rel="icon" type="image/png" href="{{ asset('storage/images/book.png') }}">
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
@@ -26,7 +26,7 @@
     <body class="bg-[#FDFDFC] dark:text-[#0a0a0a] text-[#1b1b18] flex flex-col min-h-screen items-center justify-start  px-3 lg:px-18"  style="padding-top:1cm;">
         <header class="w-full lg:max-w-4xl max-w-[335px] text-sm mb-6 not-has-[nav]:hidden h-12 flex items-center" style="background-color: #B0B0B0;">
             @if (Route::has('login'))
-                <nav class="flex items-center justify-end gap-4 p-2 w-full">
+                <nav class="flex items-center justify-end w-full gap-4 p-2">
                     @guest
                         @if (Route::has('register'))
                             <a href="{{ route('register') }}"
@@ -46,7 +46,7 @@
                 @include('auth.partials.login-form')
             </div>
         </section>
-        
+
         <style>
             @media (min-width: 1024px) {
                 section {
