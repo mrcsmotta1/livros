@@ -32,7 +32,7 @@ class RelatorioAutorService implements RelatorioAutorServiceInterface
     public function exportarCsv(array $filtros): Closure
     {
         $dados = $this->filtrarTodos($filtros);
-        $header = ['Autor', 'Livro', 'Editora', 'Ano', 'Edição', 'Valor', 'Assuntos'];
+        $header = ['Autor', 'Livro', 'Editora', 'Ano', 'Edição', 'Valor', 'Assuntos', 'Data de Criação'];
 
         return function () use ($dados, $header) {
             $file = fopen('php://output', 'w');
@@ -47,7 +47,8 @@ class RelatorioAutorService implements RelatorioAutorServiceInterface
                     $linha->ano_publicacao,
                     $linha->edicao,
                     number_format($linha->valor, 2, ',', '.'),
-                    $linha->assuntos_relacionados
+                    $linha->assuntos_relacionados,
+                    $linha->created_at
                 ], ';', '"');
             }
             fclose($file);
