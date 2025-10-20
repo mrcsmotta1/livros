@@ -80,8 +80,6 @@ class EloquentLivroRepository implements LivroRepositoryInterface
     public function updateLivro(int $codAu, array $data): Livro
     {
         $autor = Livro::findOrFail($codAu);
-        // Evita atualizar 'editora' string diretamente
-        unset($data['editora']);
 
         // Trata a codificação dos caracteres especiais
         if (isset($data['edicao'])) {
